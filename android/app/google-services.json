@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "524557077143",
+    "project_id": "toda-mart",
+    "storage_bucket": "toda-mart.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524557077143:android:7bbe5b9541da580a1837d2",
+        "android_client_info": {
+          "package_name": "com.example.toda_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAOa2sqDucLhC_e0jgd-5LjgGKexAu7-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
