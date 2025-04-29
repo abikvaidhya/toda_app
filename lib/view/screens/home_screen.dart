@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:toda_app/controllers/main_controller.dart';
+import 'package:toda_app/controllers/app_controller.dart';
+import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/app_drawer.dart';
@@ -22,7 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    MainController mainController = Get.put(MainController(), permanent: true);
+    AppController mainController = Get.put(AppController(), permanent: true);
+    SupabaseController supabaseController =
+        Get.put(SupabaseController(), permanent: true);
 
     return Scaffold(
       key: scaffoldKey,
@@ -68,7 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
             filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
             child: Obx(
               () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: Obx(() => Text(
+                          'Welcome back, ${mainController.appUser!.value.displayName ?? ""}',
+                          style: AppThemeData.appThemeData.textTheme.bodyLarge,
+                        )),
+                  ),
                   if (mainController.homeState.value == HomeState.home)
                     Dashboard()
                   else if (mainController.homeState.value == HomeState.search)

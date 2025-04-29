@@ -6,7 +6,7 @@ class AppThemeData {
     useMaterial3: true,
     fontFamily: 'Quicksand',
     buttonTheme: ButtonThemeData(buttonColor: Colors.green),
-    appBarTheme: AppBarTheme(backgroundColor: Color(0x2B118709)),
+    appBarTheme: AppBarTheme(backgroundColor: Color(0x2B0A3C07)),
     textTheme: TextTheme(
       // content
       bodySmall: TextStyle(

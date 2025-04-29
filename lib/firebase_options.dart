@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -47,19 +44,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBAOa2sqDucLhC_e0jgd-5LjgGKexAu7-0',
-    appId: '1:524557077143:android:7bbe5b9541da580a1837d2',
-    messagingSenderId: '524557077143',
-    projectId: 'toda-mart',
-    storageBucket: 'toda-mart.firebasestorage.app',
+    apiKey: 'AIzaSyBS40lclWoKa4NP3FiQckqc8FU7OqBTjh8',
+    appId: '1:374825898831:android:af0102d9d945f3b337ab3a',
+    messagingSenderId: '374825898831',
+    projectId: 'toda-mart-app',
+    storageBucket: 'toda-mart-app.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCIDEZ9Pm8isew1Zv3szhbwciHH7-I42ps',
-    appId: '1:524557077143:ios:cf3eaa7cfb9fbd871837d2',
-    messagingSenderId: '524557077143',
-    projectId: 'toda-mart',
-    storageBucket: 'toda-mart.firebasestorage.app',
+    apiKey: 'AIzaSyCmO42pJr5vyM-GCuPsEJn-HZjq4Rw6T_Y',
+    appId: '1:374825898831:ios:e66492815c32dcf137ab3a',
+    messagingSenderId: '374825898831',
+    projectId: 'toda-mart-app',
+    storageBucket: 'toda-mart-app.firebasestorage.app',
     iosBundleId: 'com.example.todaApp',
   );
 
@@ -71,4 +68,14 @@ class DefaultFirebaseOptions {
     storageBucket: 'toda-mart.firebasestorage.app',
     iosBundleId: 'com.example.todaApp',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAspuRBQexNRutkCf9NDgzTttXAmJrm5ms',
+    appId: '1:374825898831:web:a5002830faf6674a37ab3a',
+    messagingSenderId: '374825898831',
+    projectId: 'toda-mart-app',
+    authDomain: 'toda-mart-app.firebaseapp.com',
+    storageBucket: 'toda-mart-app.firebasestorage.app',
+  );
+
 }

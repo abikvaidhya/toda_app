@@ -13,7 +13,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  LoginController loginController = Get.find<LoginController>();
+  LoginController loginController = Get.put(LoginController());
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   loginController.checkLogin();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -122,26 +129,35 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         bottomNavigationBar: GestureDetector(
             onTap: () => loginController.login(),
-            child: Container(
-                height: 50,
-                color: Colors.green,
-                child: Row(
-                  spacing: 5,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'LOGIN',
-                      style: AppThemeData.appThemeData.textTheme.bodyLarge!
-                          .copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white70),
-                    ),
-                    Icon(
-                      Icons.login,
-                      color: Colors.white70,
-                    )
-                  ],
-                ))),
+            child: Obx(
+              () => Container(
+                  height: 50,
+                  color: Colors.green,
+                  child: (loginController.processing.value)
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white70,
+                          ),
+                        )
+                      : Row(
+                          spacing: 5,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'LOGIN',
+                              style: AppThemeData
+                                  .appThemeData.textTheme.bodyLarge!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white70),
+                            ),
+                            Icon(
+                              Icons.login,
+                              color: Colors.white70,
+                            )
+                          ],
+                        )),
+            )),
       ),
     );
   }
