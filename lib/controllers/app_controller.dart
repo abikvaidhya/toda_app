@@ -9,6 +9,7 @@ class AppController extends GetxController {
   Rx<HomeState> homeState = HomeState.home.obs;
   LocalStorageHelper localStorageHelper = LocalStorageHelper();
   Rx<User>? appUser;
+  RxInt homeIndex = 0.obs;
 
   @override
   onInit() {

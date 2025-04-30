@@ -1,10 +1,13 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/model/item_model.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/view/screens/product_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
+import '../controllers/app_controller.dart';
 import '../model/category_model.dart';
 import '../service/constants.dart';
 
@@ -17,15 +20,17 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   SupabaseController supabaseController = Get.find<SupabaseController>();
+  ProductController productController = Get.find<ProductController>();
+  AppController appController = Get.find<AppController>();
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        supabaseController.getItems;
-        supabaseController.getCategories;
-        supabaseController.getOfferItems;
-      },
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 20,
@@ -35,8 +40,15 @@ class _DashboardState extends State<Dashboard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 5.0,
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Obx(() => Text(
+                      'Welcome back, ${appController.appUser!.value.displayName ?? ""}',
+                      style: AppThemeData.appThemeData.textTheme.bodyLarge,
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
                 ),
                 child: Text('Top Offers',
                     style: AppThemeData.appThemeData.textTheme.labelMedium!),
@@ -74,13 +86,19 @@ class _DashboardState extends State<Dashboard> {
                       itemCount: offerProducts.length,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
-                          onTap: () => Get.to(() => ProductScreen()),
+                          onTap: () => Get.to(
+                            () => ProductScreen(),
+                            transition: Transition.cupertino,
+                          ),
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(15),
-                                    topLeft: Radius.circular(15)),
+                                  bottomRight: Radius.circular(20),
+                                  bottomLeft: Radius.circular(10),
+                                  topLeft: Radius.circular(20),
+                                  // topRight: Radius.circular(10),
+                                ),
                                 image: DecorationImage(
                                   image: AssetImage(
                                     logo_white,
@@ -96,43 +114,63 @@ class _DashboardState extends State<Dashboard> {
                                 Container(
                                   width: 60,
                                   decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10))),
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10)),
+                                  ),
                                   child: Column(
                                     children: [
                                       Text(
                                         '${offerProducts[index].discount.toStringAsFixed(2)}%',
                                         style: AppThemeData
                                             .appThemeData.textTheme.bodyMedium!
-                                            .copyWith(color: Colors.white70),
+                                            .copyWith(color: Colors.black87),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: 150,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 5.0),
-                                      margin: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.shade200,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Text(
+                                Container(
+                                  height: 40,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: [
+                                          0.2,
+                                          0.5,
+                                          0.7,
+                                          0.9,
+                                        ],
+                                        colors: [
+                                          Color.fromARGB(27, 186, 186, 186),
+                                          // Color.fromARGB(44, 220, 220, 220),
+                                          Color.fromARGB(92, 0, 234, 4),
+                                          Color.fromARGB(157, 0, 234, 4),
+                                          Color.fromARGB(200, 0, 234, 4),
+                                          // Color.fromARGB(102, 11, 11, 11),
+                                          // Color.fromARGB(137, 0, 0, 0),
+                                          // Color.fromARGB(176, 0, 0, 0),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
                                         offerProducts[index].label,
                                         style: AppThemeData
-                                            .appThemeData.textTheme.labelSmall!
-                                            .copyWith(color: Colors.black87),
+                                            .appThemeData.textTheme.bodyLarge!
+                                            .copyWith(
+                                          color: Colors.black87,
+                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -151,7 +189,7 @@ class _DashboardState extends State<Dashboard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text('Recommended for you',
                     style: AppThemeData.appThemeData.textTheme.labelMedium!),
               ),
@@ -189,7 +227,10 @@ class _DashboardState extends State<Dashboard> {
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
                         child: ListTile(
-                          onTap: () => Get.to(() => ProductScreen()),
+                          onTap: () => Get.to(
+                            () => ProductScreen(),
+                            transition: Transition.cupertino,
+                          ),
                           selectedColor: Colors.green,
                           style: ListTileStyle.list,
                           leading: Image.asset(
@@ -224,9 +265,23 @@ class _DashboardState extends State<Dashboard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 5.0),
-                child: Text('All Items',
-                    style: AppThemeData.appThemeData.textTheme.labelMedium!),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Browse Products',
+                        style:
+                            AppThemeData.appThemeData.textTheme.labelMedium!),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Text('View All',
+                          style: AppThemeData.appThemeData.textTheme.bodyMedium!
+                              .copyWith(
+                            color: Colors.black54,
+                          )),
+                    ),
+                  ],
+                ),
               ),
 
               // category chips
@@ -237,13 +292,16 @@ class _DashboardState extends State<Dashboard> {
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 7,
-                          itemBuilder: (BuildContext context, int index) {
-                            return CategoryLoader();
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 7,
+                            itemBuilder: (BuildContext context, int index) {
+                              return CategoryLoader();
+                            },
+                          ),
                         );
                       } else if (snapshot.hasError) {
                         debugPrint(
@@ -255,38 +313,79 @@ class _DashboardState extends State<Dashboard> {
 
                       List<ProductCategory> categories = (snapshot.data!);
 
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Obx(() => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: FilterChip(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  padding: EdgeInsets.zero,
-                                  showCheckmark: true,
-                                  label: Text(categories[index].name),
-                                  labelStyle: TextStyle(
-                                    fontWeight:
-                                        categories[index].isSelected.value
-                                            ? FontWeight.bold
-                                            : null,
-                                  ),
-                                  selected: categories[index].isSelected.value,
-                                  selectedColor: Colors.green,
-                                  backgroundColor: Colors.transparent,
-                                  checkmarkColor: Colors.teal,
-                                  onSelected: (bool value) {
-                                    categories[index].isSelected(
-                                        !categories[index].isSelected.value);
-                                  },
-                                ),
-                              ));
-                        },
+                      return Row(
+                        spacing: 5,
+                        children: [
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Obx(
+                            () => FilterChip(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25))),
+                              padding: EdgeInsets.zero,
+                              showCheckmark: true,
+                              label: Text(productController.all.name),
+                              labelStyle: AppThemeData
+                                  .appThemeData.textTheme.bodyLarge!
+                                  .copyWith(
+                                      color:
+                                          productController.all.isSelected.value
+                                              ? Colors.white
+                                              : Colors.black),
+                              selected: productController.all.isSelected.value,
+                              selectedColor: Colors.green,
+                              backgroundColor: Colors.transparent,
+                              checkmarkColor: Colors.white,
+                              onSelected: (bool value) {
+                                productController.all.isSelected(
+                                    !productController.all.isSelected.value);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: categories.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Obx(() => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      child: FilterChip(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(25))),
+                                        padding: EdgeInsets.zero,
+                                        showCheckmark: true,
+                                        label: Text(categories[index].name),
+                                        labelStyle: AppThemeData
+                                            .appThemeData.textTheme.bodyLarge!
+                                            .copyWith(
+                                                color: categories[index]
+                                                        .isSelected
+                                                        .value
+                                                    ? Colors.white
+                                                    : Colors.black),
+                                        selected:
+                                            categories[index].isSelected.value,
+                                        selectedColor: Colors.green,
+                                        backgroundColor: Colors.transparent,
+                                        checkmarkColor: Colors.white,
+                                        onSelected: (bool value) {
+                                          categories[index].isSelected(
+                                              !categories[index]
+                                                  .isSelected
+                                                  .value);
+                                          // supabaseController.allProducts.where((e)=>e.)
+                                        },
+                                      ),
+                                    ));
+                              },
+                            ),
+                          ),
+                        ],
                       );
                     }),
               ),
@@ -321,7 +420,8 @@ class _DashboardState extends State<Dashboard> {
                       );
                     }
 
-                    List<Product> items = snapshot.data!;
+                    // List<Product> items = snapshot.data!;
+                    productController.allProducts(snapshot.data!);
 
                     return GridView.builder(
                       physics: NeverScrollableScrollPhysics(),
@@ -332,52 +432,105 @@ class _DashboardState extends State<Dashboard> {
                         crossAxisSpacing: 10, // spacing between columns
                       ),
                       padding: EdgeInsets.all(10.0),
-                      itemCount: items.length,
+                      itemCount: productController.allProducts.length < 6
+                          ? productController.allProducts.length
+                          : 6,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => Get.to(() => ProductScreen()),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(20),
-                                    bottomLeft: Radius.circular(10),
-                                    topLeft: Radius.circular(20)),
-                                image: DecorationImage(
+                          onTap: () => Get.to(
+                            () => ProductScreen(),
+                            transition: Transition.cupertino,
+                          ),
+                          child: OpenContainer(
+                            closedShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(15),
+                              ),
+                            ),
+                            openBuilder: (BuildContext context,
+                                    void Function({Object? returnValue})
+                                        action) =>
+                                ProductScreen(),
+                            closedBuilder:
+                                (BuildContext context, void Function() action) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
                                   image: AssetImage(
                                     logo_white,
                                   ),
                                   fit: BoxFit.cover,
                                 )),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Container(
-                                      width: 120,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      margin: EdgeInsets.all(5),
+                                      height: 70,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
                                       decoration: BoxDecoration(
-                                          color: Colors.green.shade200,
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            stops: [
+                                              0.2,
+                                              0.5,
+                                              0.7,
+                                              0.9,
+                                            ],
+                                            colors: [
+                                              Color.fromARGB(44, 220, 220, 220),
+                                              Color.fromARGB(92, 0, 234, 4),
+                                              Color.fromARGB(157, 0, 234, 4),
+                                              Color.fromARGB(200, 0, 234, 4),
+                                            ],
+                                          ),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10))),
-                                      child: Text(
-                                        items[index].label,
-                                        style: AppThemeData
-                                            .appThemeData.textTheme.labelSmall!
-                                            .copyWith(color: Colors.black87),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              productController
+                                                  .allProducts[index].label,
+                                              style: AppThemeData.appThemeData
+                                                  .textTheme.bodyLarge!
+                                                  .copyWith(
+                                                      color: Colors.black87),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                  padding: EdgeInsets.all(2),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(5)),
+                                                    color:
+                                                        Colors.deepOrangeAccent,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white70,
+                                                    size: 20,
+                                                  )))
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
                         );
                       },
@@ -385,7 +538,7 @@ class _DashboardState extends State<Dashboard> {
                   }),
             ],
           ),
-          SizedBox.shrink()
+          // SizedBox.shrink()
         ],
       ),
     );

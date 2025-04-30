@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 
 class AppThemeData {
   static ThemeData appThemeData = ThemeData(
-    primaryColor: Colors.black87,
+    primaryColor: Color(0x2B057100),
     useMaterial3: true,
     fontFamily: 'Quicksand',
-    buttonTheme: ButtonThemeData(buttonColor: Colors.green),
-    appBarTheme: AppBarTheme(backgroundColor: Color(0x2B0A3C07)),
+    buttonTheme: ButtonThemeData(buttonColor: Color(0x2B057100)),
+    appBarTheme: AppBarTheme(
+        backgroundColor: Colors.green,
+        iconTheme: IconThemeData(color: Colors.white),
+        titleTextStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.black87,
+          height: 2,
+          fontWeight: FontWeight.w500,
+        )),
     textTheme: TextTheme(
       // content
       bodySmall: TextStyle(

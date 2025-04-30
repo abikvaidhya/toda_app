@@ -1,13 +1,14 @@
 import 'dart:ui';
-
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
+import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/app_drawer.dart';
+import 'package:toda_app/view/bottom_nav_bar.dart';
+import '../../controllers/firebase_controller.dart';
 import '../cart.dart';
 import '../dashboard.dart';
 import '../search.dart';
@@ -20,75 +21,58 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  AppController appController = Get.put(AppController(), permanent: true);
+  FirebaseController firebaseController = Get.find<FirebaseController>();
+
+  Widget homeWidgets() {
+    switch (appController.homeState.value) {
+      case HomeState.search:
+        return Search();
+      case HomeState.cart:
+        return Cart();
+      default:
+        return Dashboard();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    AppController mainController = Get.put(AppController(), permanent: true);
-    SupabaseController supabaseController =
-        Get.put(SupabaseController(), permanent: true);
+    Get.put(SupabaseController(), permanent: true);
+    Get.put(ProductController(), permanent: true);
 
     return Scaffold(
       key: scaffoldKey,
-      floatingActionButton: BlurryContainer(
-          borderRadius: BorderRadius.all(Radius.circular(40)),
-          padding: EdgeInsets.zero,
-          blur: 4,
-          color: Colors.green.withAlpha(50),
-          child: IconButton(
-              onPressed: () => mainController.homeState(HomeState.home),
-              icon: Icon(Icons.search))),
+      backgroundColor: Colors.green,
+      bottomNavigationBar: BottomNavBar(),
       appBar: AppBar(
-        titleTextStyle: AppThemeData.appThemeData.textTheme.bodyMedium!,
+        backgroundColor: Colors.green,
+        elevation: 0,
         title: Text(
           'Toda Mart',
-          style: AppThemeData.appThemeData.textTheme.labelLarge!,
+          style: AppThemeData.appThemeData.textTheme.labelLarge!.copyWith(
+            color: Colors.white,
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.green,
         ),
         actions: [
           GestureDetector(
             onTap: () => scaffoldKey.currentState!.openEndDrawer(),
-            child: Image.asset(
-              app_logo,
-              height: 45,
-            ),
-          )
+            onLongPress: () => appController.clearAppStorage(),
+            child: Image.asset(app_logo),
+          ),
         ],
       ),
       endDrawer: AppDrawer(),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            opacity: 0.2,
-            scale: 1.2,
-            image: AssetImage(
-              background_dark_green,
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
-            child: Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Obx(() => Text(
-                          'Welcome back, ${mainController.appUser!.value.displayName ?? ""}',
-                          style: AppThemeData.appThemeData.textTheme.bodyLarge,
-                        )),
-                  ),
-                  if (mainController.homeState.value == HomeState.home)
-                    Dashboard()
-                  else if (mainController.homeState.value == HomeState.search)
-                    Search()
-                  else
-                    Cart()
-                ],
-              ),
-            ),
+      body: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: BackdropFilter(
+          // filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+          filter: ImageFilter.blur(sigmaY: 0, sigmaX: 0),
+          child: Obx(
+            () => homeWidgets(),
           ),
         ),
       ),

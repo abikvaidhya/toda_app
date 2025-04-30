@@ -20,7 +20,10 @@ class _OfferProductLoaderState extends State<OfferProductLoader> {
         decoration: BoxDecoration(
           color: Colors.green.shade900,
           borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(15), topLeft: Radius.circular(15)),
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(10),
+            topLeft: Radius.circular(20),
+          ),
         ),
         height: 100,
         width: 200,
@@ -46,7 +49,7 @@ class _CategoryLoaderState extends State<CategoryLoader> {
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: FilterChip(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              borderRadius: BorderRadius.all(Radius.circular(25))),
           padding: EdgeInsets.zero,
           label: Text('category'),
           onSelected: (bool value) {},
@@ -72,10 +75,8 @@ class _ProductLoaderState extends State<ProductLoader> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.blue.shade200,
-          borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(20),
-              bottomLeft: Radius.circular(10),
-              topLeft: Radius.circular(20)),
+          borderRadius: BorderRadius.all(
+               Radius.circular(15),),
         ),
       ),
     );

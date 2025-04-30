@@ -1,9 +1,11 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/login_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/login_form.dart';
+import 'package:toda_app/view/screens/registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,13 +17,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   LoginController loginController = Get.put(LoginController());
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   loginController.checkLogin();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -30,15 +25,16 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(
-                background_green,
-              ),
-              fit: BoxFit.cover,
-            ),
+                image: AssetImage(
+                  background_green,
+                ),
+                fit: BoxFit.cover,
+                opacity: 1),
           ),
           child: Center(
             child: SingleChildScrollView(
               child: Column(
+                spacing: 10,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // logo
@@ -52,37 +48,77 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // login form
                   LoginForm(),
+                  GestureDetector(
+                      onTap: () => loginController.login(),
+                      child: Obx(
+                        () => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            height: 60,
+                            child: (loginController.processing.value)
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white70,
+                                    ),
+                                  )
+                                : Row(
+                                    spacing: 5,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'LOGIN',
+                                        style: AppThemeData
+                                            .appThemeData.textTheme.bodyLarge!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white70),
+                                      ),
+                                      Icon(
+                                        Icons.login,
+                                        color: Colors.white70,
+                                      )
+                                    ],
+                                  )),
+                      )),
 
-                  Column(
-                    spacing: 10,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: Divider(
-                            endIndent: 20,
-                            indent: 20,
-                          )),
-                          Text(
-                            'Or login using',
-                            style: AppThemeData
-                                .appThemeData.textTheme.bodySmall!
-                                .copyWith(color: Colors.black54),
-                          ),
-                          Expanded(
-                              child: Divider(
-                            endIndent: 20,
-                            indent: 20,
-                          )),
-                        ],
-                      ),
-
-                      // gmail login
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 10,
-                        children: [
-                          Obx(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      spacing: 10,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Divider(
+                              endIndent: 20,
+                              indent: 20,
+                              color: Colors.black54,
+                            )),
+                            Text(
+                              'Or continue with',
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelSmall!
+                                  .copyWith(color: Colors.black54),
+                            ),
+                            Expanded(
+                                child: Divider(
+                              endIndent: 20,
+                              indent: 20,
+                              color: Colors.black54,
+                            )),
+                          ],
+                        ), // gmail login
+                        BlurryContainer(
+                          elevation: 5,
+                          blur: 8,
+                          height: 60,
+                          color: Colors.black12,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          borderRadius: BorderRadius.circular(30),
+                          child: Obx(
                             () => loginController.usingEmail.value
                                 ? GestureDetector(
                                     onTap: () {
@@ -92,10 +128,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                           .clear();
                                       loginController.usingEmail(false);
                                     },
-                                    child: Image.asset(
-                                      height: 50,
-                                      phone,
-                                      fit: BoxFit.contain,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      spacing: 20,
+                                      children: [
+                                        Image.asset(
+                                          height: 30,
+                                          phone,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        Text('Login using email')
+                                      ],
                                     ),
                                   )
                                 : GestureDetector(
@@ -106,58 +150,66 @@ class _LoginScreenState extends State<LoginScreen> {
                                           .clear();
                                       loginController.usingEmail(true);
                                     },
-                                    child: Image.asset(
-                                      height: 50,
-                                      email,
-                                      fit: BoxFit.contain,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      spacing: 20,
+                                      children: [
+                                        Image.asset(
+                                          height: 30,
+                                          email,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        Text('Login using phone')
+                                      ],
                                     ),
                                   ),
                           ),
-                          Image.asset(
-                            height: 50,
-                            gmail_logo,
-                            fit: BoxFit.contain,
+                        ),
+                        BlurryContainer(
+                          elevation: 5,
+                          blur: 8,
+                          height: 60,
+                          color: Colors.black12,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          borderRadius: BorderRadius.circular(30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 20,
+                            children: [
+                              Image.asset(
+                                height: 30,
+                                gmail_logo,
+                                fit: BoxFit.contain,
+                              ),
+                              Text('Login using Gmail')
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Don't have an account? "),
+                            GestureDetector(
+                              onTap: () => Get.to(() => RegistrationScreen(),
+                                  transition: Transition.cupertino),
+                              child: Text(
+                                "Register here.",
+                                style: AppThemeData
+                                    .appThemeData.textTheme.bodyMedium!
+                                    .copyWith(color: Colors.green),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
         ),
-        bottomNavigationBar: GestureDetector(
-            onTap: () => loginController.login(),
-            child: Obx(
-              () => Container(
-                  height: 50,
-                  color: Colors.green,
-                  child: (loginController.processing.value)
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white70,
-                          ),
-                        )
-                      : Row(
-                          spacing: 5,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'LOGIN',
-                              style: AppThemeData
-                                  .appThemeData.textTheme.bodyLarge!
-                                  .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white70),
-                            ),
-                            Icon(
-                              Icons.login,
-                              color: Colors.white70,
-                            )
-                          ],
-                        )),
-            )),
       ),
     );
   }
