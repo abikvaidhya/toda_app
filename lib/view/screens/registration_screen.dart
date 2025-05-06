@@ -47,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onTap: () => registrationController.register(),
           child: Container(
               height: 50,
-              color: Colors.green,
+              color: primaryColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

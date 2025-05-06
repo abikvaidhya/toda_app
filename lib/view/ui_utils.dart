@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../service/constants.dart';
+
 class UiUtils {
   showSnackBar(
       {required String title,
@@ -9,7 +11,7 @@ class UiUtils {
       bool isLong = false}) {
     Get.showSnackbar(GetSnackBar(
       showProgressIndicator: true,
-      backgroundColor: isError ? Colors.red : Colors.green,
+      backgroundColor: isError ? Colors.red : primaryColor,
       snackStyle: SnackStyle.GROUNDED,
       duration: Duration(seconds: isLong ? 5 : 3),
       icon: isError ? Icon(Icons.error) : null,

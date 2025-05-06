@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         () => Container(
                             margin: EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: primaryColor,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             height: 60,
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 "Register here.",
                                 style: AppThemeData
                                     .appThemeData.textTheme.bodyMedium!
-                                    .copyWith(color: Colors.green),
+                                    .copyWith(color: primaryColor),
                               ),
                             ),
                           ],

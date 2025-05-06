@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
+import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
@@ -23,30 +24,34 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   AppController appController = Get.put(AppController(), permanent: true);
+  SupabaseController supabaseController =
+      Get.put(SupabaseController(), permanent: true);
+  CartController cartController = Get.put(CartController(), permanent: true);
+  ProductController productController =
+      Get.put(ProductController(), permanent: true);
   FirebaseController firebaseController = Get.find<FirebaseController>();
 
   Widget homeWidgets() {
-    switch (appController.homeState.value) {
-      case HomeState.search:
-        return Search();
-      case HomeState.cart:
-        return Cart();
-      default:
-        return Dashboard();
-    }
+    return PageView(
+      physics: NeverScrollableScrollPhysics(),
+      controller: appController.homePageController,
+      children: [
+        Dashboard(),
+        Search(),
+        Cart(),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SupabaseController(), permanent: true);
-    Get.put(ProductController(), permanent: true);
-
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Colors.green,
+      backgroundColor: primaryColor,
       bottomNavigationBar: BottomNavBar(),
+      extendBody: true,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: primaryColor,
         elevation: 0,
         title: Text(
           'Toda Mart',
@@ -55,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         iconTheme: IconThemeData(
-          color: Colors.green,
+          color: primaryColor,
         ),
         actions: [
           GestureDetector(
@@ -66,15 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       endDrawer: AppDrawer(),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: BackdropFilter(
-          // filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
-          filter: ImageFilter.blur(sigmaY: 0, sigmaX: 0),
-          child: Obx(
-            () => homeWidgets(),
-          ),
-        ),
+      body: RefreshIndicator(
+        onRefresh: () async => productController.clearProductCache(),
+        child: homeWidgets(),
       ),
     );
   }

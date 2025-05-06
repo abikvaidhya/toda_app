@@ -190,7 +190,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       child: Text(
                         "Login here.",
                         style: AppThemeData.appThemeData.textTheme.bodyMedium!
-                            .copyWith(color: Colors.green),
+                            .copyWith(color: primaryColor),
                       ),
                     ),
                   ],

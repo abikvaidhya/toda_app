@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toda_app/view/product_UIs.dart';
 import 'package:toda_app/view/screens/product_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
 import '../controllers/product_controller.dart';
@@ -26,7 +27,8 @@ class _SearchState extends State<Search> {
         padding: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -66,7 +68,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
               StreamBuilder(
-                  stream: supabaseController.getItems,
+                  stream: supabaseController.getAllProducts,
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,104 +112,21 @@ class _SearchState extends State<Search> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () => Get.to(
-                            () => ProductScreen(),
+                            () => ProductScreen(
+                              product: productController.allProducts[index],
+                            ),
                             transition: Transition.cupertino,
                           ),
-                          child: OpenContainer(
-                            closedShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                              ),
-                            ),
-                            openBuilder: (BuildContext context,
-                                    void Function({Object? returnValue})
-                                        action) =>
-                                ProductScreen(),
-                            closedBuilder:
-                                (BuildContext context, void Function() action) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                  image: AssetImage(
-                                    logo_white,
-                                  ),
-                                  fit: BoxFit.cover,
-                                )),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 5,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            stops: [
-                                              0.2,
-                                              0.5,
-                                              0.7,
-                                              0.6,
-                                            ],
-                                            colors: [
-                                              Color.fromARGB(44, 220, 220, 220),
-                                              Color.fromARGB(92, 0, 234, 4),
-                                              Color.fromARGB(157, 0, 234, 4),
-                                              Color.fromARGB(200, 0, 234, 4),
-                                            ],
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              productController
-                                                  .allProducts[index].label,
-                                              style: AppThemeData.appThemeData
-                                                  .textTheme.bodyLarge!
-                                                  .copyWith(
-                                                      color: Colors.black87),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                  padding: EdgeInsets.all(2),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(5)),
-                                                    color:
-                                                        Colors.deepOrangeAccent,
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.add,
-                                                    color: Colors.white70,
-                                                    size: 20,
-                                                  )))
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                          child: GridProduct(
+                            product: productController.allProducts[index],
                           ),
                         );
                       },
                     );
                   }),
+              SizedBox(
+                height: 50,
+              )
             ],
           ),
         ));

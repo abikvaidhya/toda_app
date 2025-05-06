@@ -29,7 +29,7 @@ class _LandingScreenState extends State<LandingScreen> {
           () => (landingController.checking.value)
               ? Center(
                   child: CircularProgressIndicator(
-                    color: Colors.green,
+                    color: primaryColor,
                   ),
                 )
               : PageView(
@@ -64,7 +64,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               CircleAvatar(
                                   backgroundColor: Colors.black26,
                                   child: Icon(Icons.navigate_next,
-                                      color: Colors.green)),
+                                      color: primaryColor)),
                             ],
                           ),
                           SizedBox()
@@ -100,7 +100,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               CircleAvatar(
                                   backgroundColor: Colors.black26,
                                   child: Icon(Icons.navigate_next,
-                                      color: Colors.green))
+                                      color: primaryColor))
                             ],
                           ),
                           SizedBox()
@@ -143,7 +143,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                       landingController.initializeApp(),
                                   child: Icon(
                                     Icons.login,
-                                    color: Colors.green,
+                                    color: primaryColor,
                                     size: 30,
                                   )),
                             ],

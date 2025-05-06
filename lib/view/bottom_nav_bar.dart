@@ -1,7 +1,7 @@
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/app_controller.dart';
-import 'screens/setting_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -16,50 +16,47 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => BottomNavigationBar(
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: appController.homeIndex.value,
-        backgroundColor: Colors.green,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black45,
-        unselectedFontSize: 14,
-        iconSize: 26,
+      () => AnimatedNotchBottomBar(
+        circleMargin: 0,
+        elevation: 0,bottomBarHeight: 80,
+        durationInMilliSeconds: 100,
+        showBlurBottomBar: false,
         onTap: (i) {
           if (i != 3) appController.homeIndex(i);
           switch (i) {
             case 1:
               appController.homeState(HomeState.search);
+              appController.navigateDashboard(id: 1);
+
               break;
             case 2:
               appController.homeState(HomeState.cart);
-              break;
-            case 3:
-              Get.to(() => SettingScreen());
+              appController.navigateDashboard(id: 2);
+
               break;
             default:
               appController.homeState(HomeState.home);
+              appController.navigateDashboard(id: 0);
               break;
           }
         },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
+        bottomBarItems: [
+          BottomBarItem(
+              inActiveItem: Icon(Icons.home_outlined),
+              activeItem: Icon(Icons.home_filled),
+              itemLabel: 'Home'),
+          BottomBarItem(
+              inActiveItem: Icon(Icons.search),
+              activeItem: Icon(Icons.search),
+              itemLabel: 'Search'),
+          BottomBarItem(
+              inActiveItem: Icon(Icons.shopping_cart_outlined),
+              activeItem: Icon(Icons.shopping_cart),
+              itemLabel: 'Cart'),
         ],
+        kIconSize: 24,
+        kBottomRadius: 10,
+        notchBottomBarController: appController.navBarController.value,
       ),
     );
   }

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:toda_app/service/constants.dart';
 
 class AppThemeData {
   static ThemeData appThemeData = ThemeData(
-    primaryColor: Color(0x2B057100),
+    primaryColor: primaryColor,
+    secondaryHeaderColor: secondaryColor,
     useMaterial3: true,
     fontFamily: 'Quicksand',
-    buttonTheme: ButtonThemeData(buttonColor: Color(0x2B057100)),
+    iconTheme: IconThemeData(color: primaryColor),
+    buttonTheme: ButtonThemeData(
+      buttonColor: primaryColor,
+    ),
     appBarTheme: AppBarTheme(
-        backgroundColor: Colors.green,
+        backgroundColor: primaryColor,
         iconTheme: IconThemeData(color: Colors.white),
         titleTextStyle: TextStyle(
           fontSize: 16,

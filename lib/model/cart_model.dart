@@ -2,45 +2,42 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'cart_item_model.dart';
-
 Cart getReceipt(Map<String, dynamic> str) => Cart.fromJson(str);
 
 String receiptJson(Cart data) => json.encode(data.toJson());
 
 class Cart {
   Cart({
-    // required this.code,
     required this.id,
     required this.cart,
     required this.placedIn,
     required this.totalPrice,
     required this.shippingPrice,
     required this.address,
-    required this.paymentMethod,
+    required this.customerName,
+    required this.customerId,
+    required this.discountedAmount,
     required this.isActive,
   });
 
-  // late final String code;
   late final String id;
-  late final List<CartItem> cart;
+  late final String address, customerName, customerId;
+  late final List<int> cart;
   late final Timestamp placedIn;
-  late final double totalPrice;
-  late final double shippingPrice;
-  late final String address;
-  late final String paymentMethod;
+  late final double totalPrice, discountedAmount, shippingPrice;
   late final bool isActive;
 
   Cart.fromJson(Map<String, dynamic> json) {
-    // code = (json['code']).toString();
-    id = (json['code']).toString();
+    id = (json['id']).toString();
     cart = json['cart'];
-    placedIn = json['placedIn'];
-    totalPrice = json['totalPrice'];
-    shippingPrice = json['shippingPrice'];
+    placedIn = json['placed_in'];
+    totalPrice = json['total_price'];
+    shippingPrice = json['shipping_price'];
     address = json['address'];
-    paymentMethod = json['paymentMethod'];
-    isActive = json['isActive'];
+    customerName = json['customer_name'];
+    customerId = json['customer_id'];
+    discountedAmount = json['discounted_amount'];
+    isActive = json['is_active'];
   }
 
   factory Cart.fromSnapshot(
@@ -48,30 +45,32 @@ class Cart {
     final docData = documentSnapshot.data()!;
     return Cart(
       id: (documentSnapshot.id).toString(),
-      // code: (docData['code']).toString(),
-      cart: (docData['cart'] as List<dynamic>)
-          .map((e) => CartItem.fromJson(e))
+      cart: (docData['cart'] as List<int>)
+          .map((e) => int.parse(e.toString()))
           .toList(),
-      placedIn: docData['placedIn'] ?? Timestamp.now(),
-      totalPrice: docData['totalPrice'] ?? 0.0,
-      shippingPrice: docData['shippingPrice'] ?? 0.0,
+      placedIn: docData['placed_in'] ?? Timestamp.now(),
+      totalPrice: docData['total_price'] ?? 0.0,
+      shippingPrice: docData['shipping_price'] ?? 0.0,
+      discountedAmount: (docData['discounted_amount'] ?? 0.0),
       address: (docData['address']).toString(),
-      paymentMethod: (docData['paymentMethod']).toString(),
-      isActive: (docData['isActive']),
+      isActive: (docData['is_active']),
+      customerName: docData['customer_name'],
+      customerId: docData['customer_id'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final cartItem = <String, dynamic>{};
-    cartItem['code'] = id;
-    // cartItem['code'] = code;
+    cartItem['id'] = int.parse(id);
     cartItem['cart'] = cart;
-    cartItem['placedIn'] = placedIn;
-    cartItem['totalPrice'] = totalPrice;
-    cartItem['shippingPrice'] = shippingPrice;
+    cartItem['placed_in'] = placedIn;
+    cartItem['total_price'] = totalPrice;
+    cartItem['shipping_price'] = shippingPrice;
     cartItem['address'] = address;
-    cartItem['paymentMethod'] = paymentMethod;
-    cartItem['isActive'] = isActive;
+    cartItem['customer_name'] = customerName;
+    cartItem['customer_id'] = customerId;
+    cartItem['discounted_amount'] = discountedAmount;
+    cartItem['is_active'] = isActive;
     return cartItem;
   }
 }
