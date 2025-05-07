@@ -1,17 +1,14 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
-import 'package:toda_app/model/product_model.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/view/product_UIs.dart';
-import 'package:toda_app/view/screens/product_screen.dart';
+import 'package:toda_app/view/screens/all_products_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
 import '../controllers/app_controller.dart';
-import '../model/cart_model.dart';
-import '../model/product_group_model.dart';
+import '../model/product_model.dart';
 import '../service/constants.dart';
 
 class Dashboard extends StatefulWidget {
@@ -49,10 +46,10 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Obx(() => Text(
-                        'Welcome back, ${appController.appUser!.value.displayName ?? ""}',
-                        style: AppThemeData.appThemeData.textTheme.bodyLarge,
-                      )),
+                  child: Text(
+                    'Welcome back,',
+                    style: AppThemeData.appThemeData.textTheme.bodyLarge,
+                  ),
                 ),
                 if (productController.offerProducts.isNotEmpty)
                   Padding(
@@ -63,7 +60,7 @@ class _DashboardState extends State<Dashboard> {
                         style: AppThemeData.appThemeData.textTheme.labelMedium),
                   ),
                 StreamBuilder(
-                  stream: supabaseController.getOfferProducts,
+                  stream: supabaseController.getOfferProductStream,
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -97,8 +94,7 @@ class _DashboardState extends State<Dashboard> {
                         itemCount: productController.offerProducts.length,
                         itemBuilder: (BuildContext context, int index) {
                           return OfferProduct(
-                              product:
-                                  productController.offerProducts[index]);
+                              product: productController.offerProducts[index]);
                         },
                       ),
                     );
@@ -120,10 +116,7 @@ class _DashboardState extends State<Dashboard> {
                           style:
                               AppThemeData.appThemeData.textTheme.labelMedium!),
                       GestureDetector(
-                        onTap: () => appController.navigateDashboard(
-                          id: 1,
-                          changeNav: true,
-                        ),
+                        onTap: () => Get.to(() => AllProductsScreen()),
                         child: Text('View All',
                             style: AppThemeData
                                 .appThemeData.textTheme.bodyMedium!
@@ -135,125 +128,9 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
 
-                // category chips
-                SizedBox(
-                  height: 40,
-                  child: StreamBuilder(
-                      stream: supabaseController.getProductCategories,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 7,
-                              itemBuilder: (BuildContext context, int index) {
-                                return CategoryLoader();
-                              },
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          debugPrint(
-                              '>> error getting categories: ${snapshot.error.toString()}');
-                          return Text('Error getting categories!');
-                        } else if (!snapshot.hasData) {
-                          return Text('No categories!');
-                        }
-
-                        productController.productGroup(snapshot.data!);
-
-                        return Row(
-                          spacing: 5,
-                          children: [
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Obx(
-                              () => FilterChip(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25))),
-                                padding: EdgeInsets.zero,
-                                showCheckmark: true,
-                                label: Text(productController.all.name),
-                                labelStyle: AppThemeData
-                                    .appThemeData.textTheme.bodyLarge!
-                                    .copyWith(
-                                        color: productController
-                                                .all.isSelected.value
-                                            ? Colors.white
-                                            : Colors.black),
-                                selected:
-                                    productController.all.isSelected.value,
-                                selectedColor: primaryColor,
-                                backgroundColor: Colors.transparent,
-                                checkmarkColor: Colors.white,
-                                onSelected: (bool value) {
-                                  productController.all.isSelected(
-                                      !productController.all.isSelected.value);
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount:
-                                    productController.productGroup.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Obx(() => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5.0),
-                                        child: FilterChip(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(25))),
-                                          padding: EdgeInsets.zero,
-                                          showCheckmark: true,
-                                          label: Text(productController
-                                              .productGroup[index].name),
-                                          labelStyle: AppThemeData
-                                              .appThemeData.textTheme.bodyLarge!
-                                              .copyWith(
-                                                  color: productController
-                                                          .productGroup[
-                                                              index]
-                                                          .isSelected
-                                                          .value
-                                                      ? Colors.white
-                                                      : Colors.black),
-                                          selected: productController
-                                              .productGroup[index]
-                                              .isSelected
-                                              .value,
-                                          selectedColor: primaryColor,
-                                          backgroundColor: Colors.transparent,
-                                          checkmarkColor: Colors.white,
-                                          onSelected: (bool value) {
-                                            productController
-                                                .productGroup[index]
-                                                .isSelected(!productController
-                                                    .productGroup[index]
-                                                    .isSelected
-                                                    .value);
-                                            // supabaseController.allProducts.where((e)=>e.)
-                                          },
-                                        ),
-                                      ));
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
-                ),
-
-                // items
+                // dashboard products
                 StreamBuilder(
-                    stream: supabaseController.getAllProducts,
+                    stream: supabaseController.getDashboardProductStream,
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -282,8 +159,7 @@ class _DashboardState extends State<Dashboard> {
                         );
                       }
 
-                      // List<Product> items = snapshot.data!;
-                      productController.allProducts(snapshot.data!);
+                      List<Product> products = snapshot.data!;
 
                       return GridView.builder(
                         physics: NeverScrollableScrollPhysics(),
@@ -294,12 +170,10 @@ class _DashboardState extends State<Dashboard> {
                           crossAxisSpacing: 10, // spacing between columns
                         ),
                         padding: EdgeInsets.all(10.0),
-                        itemCount: productController.allProducts.length < 6
-                            ? productController.allProducts.length
-                            : 6,
+                        itemCount: products.length < 6 ? products.length : 6,
                         itemBuilder: (context, index) {
                           return GridProduct(
-                            product: productController.allProducts[index],
+                            product: products[index],
                           );
                         },
                       );

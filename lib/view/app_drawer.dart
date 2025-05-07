@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
-import 'package:toda_app/controllers/firebase_controller.dart';
+import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
+import 'package:toda_app/view/screens/profile_management_screen.dart';
 import '../service/constants.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -14,7 +15,7 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   AppController mainController = Get.find<AppController>();
-  FirebaseController firebaseController = Get.find<FirebaseController>();
+  SupabaseController supabaseController = Get.find<SupabaseController>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +48,18 @@ class _AppDrawerState extends State<AppDrawer> {
                 Icons.receipt_long,
               ),
               title: Text(
-                'Orders',
+                'Order History',
                 style: AppThemeData.appThemeData.textTheme.bodyLarge,
               ),
             ),
             Spacer(),
             ListTile(
-              onTap: () => firebaseController.logOut(),
-              onLongPress: () => mainController.clearAppStorage(),
-              title: Text(
-                'Logout',
-                style: AppThemeData.appThemeData.textTheme.bodyMedium,
-              ),
-              trailing: Icon(Icons.logout),
+              leading: GestureDetector(
+                  onTap: () => Get.to(() => ProfileManagementScreen()),
+                  child: Icon(Icons.account_circle)),
+              trailing: GestureDetector(
+                  onTap: () => supabaseController.logoutUser(),
+                  child: Icon(Icons.logout)),
             ),
           ],
         ),

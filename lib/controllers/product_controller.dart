@@ -18,7 +18,8 @@ class ProductController extends GetxController {
   );
   RxBool loadingBaseUnits = true.obs;
   RxList<Product> offerProducts = <Product>[].obs,
-      allProducts = <Product>[].obs;
+      allProducts = <Product>[].obs,
+      filteredProducts = <Product>[].obs;
   RxList<ProductGroup> productGroup = <ProductGroup>[].obs;
   RxList<BaseUnit> baseUnits = <BaseUnit>[].obs;
 
@@ -30,36 +31,33 @@ class ProductController extends GetxController {
   }
 
   Future getAllProducts() async {
-    await supabaseController.getAllProducts
-        .toList()
-        .then((e) => e.map((product) => Product.fromJson(product)));
-    return allProducts;
+    allProducts(await supabaseController.getAllProducts);
   }
 
-  // Future getBaseUnits() async {
-  //   loadingBaseUnits(true);
-  //   try {
-  //     if (baseUnits.isEmpty) {
-  //       debugPrint('>> getting base units');
-  //       debugPrint(supabaseController.getBaseUnit.first.)
-  //       baseUnits(await supabaseController.getBaseUnit
-  //           .asyncMap((e) => BaseUnit.fromJson(e))
-  //           .toList());
-  //       // baseUnits((await supabaseController.getBaseUnit)
-  //       //     .toList()
-  //       //     .map((e) => BaseUnit.fromJson(e))
-  //       //     .toList());
-  //     }
-  //   } catch (e) {
-  //     baseUnits.clear();
-  //     debugPrint('>> error getting base units: ${e.toString()}');
-  //     // UiUtils().showSnackBar(
-  //     //   title: 'Error',
-  //     //   message: e.toString(),
-  //     //   isError: true,
-  //     // );
-  //   } finally {
-  //     loadingBaseUnits(false);
-  //   }
-  // }
+// Future getBaseUnits() async {
+//   loadingBaseUnits(true);
+//   try {
+//     if (baseUnits.isEmpty) {
+//       debugPrint('>> getting base units');
+//       debugPrint(supabaseController.getBaseUnit.first.)
+//       baseUnits(await supabaseController.getBaseUnit
+//           .asyncMap((e) => BaseUnit.fromJson(e))
+//           .toList());
+//       // baseUnits((await supabaseController.getBaseUnit)
+//       //     .toList()
+//       //     .map((e) => BaseUnit.fromJson(e))
+//       //     .toList());
+//     }
+//   } catch (e) {
+//     baseUnits.clear();
+//     debugPrint('>> error getting base units: ${e.toString()}');
+//     // UiUtils().showSnackBar(
+//     //   title: 'Error',
+//     //   message: e.toString(),
+//     //   isError: true,
+//     // );
+//   } finally {
+//     loadingBaseUnits(false);
+//   }
+// }
 }

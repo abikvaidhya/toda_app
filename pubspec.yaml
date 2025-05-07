@@ -13,10 +13,6 @@ dependencies:
     sdk: flutter
 
   cupertino_icons:
-  cloud_firestore:
-  firebase_core:
-  firebase_auth:
-  firebase_storage:
   flutter_secure_storage: ^9.2.4
   animations:
   google_maps_flutter:

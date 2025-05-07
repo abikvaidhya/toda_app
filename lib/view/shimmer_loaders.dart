@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../service/constants.dart';
 
 // offered products shimmer loader
 class OfferProductLoader extends StatefulWidget {
@@ -32,14 +35,14 @@ class _OfferProductLoaderState extends State<OfferProductLoader> {
   }
 }
 
-class CategoryLoader extends StatefulWidget {
-  const CategoryLoader({super.key});
+class ProductGroupLoader extends StatefulWidget {
+  const ProductGroupLoader({super.key});
 
   @override
-  State<CategoryLoader> createState() => _CategoryLoaderState();
+  State<ProductGroupLoader> createState() => _ProductGroupLoaderState();
 }
 
-class _CategoryLoaderState extends State<CategoryLoader> {
+class _ProductGroupLoaderState extends State<ProductGroupLoader> {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
@@ -76,7 +79,8 @@ class _ProductLoaderState extends State<ProductLoader> {
         decoration: BoxDecoration(
           color: Colors.blue.shade200,
           borderRadius: BorderRadius.all(
-               Radius.circular(15),),
+            Radius.circular(15),
+          ),
         ),
       ),
     );
@@ -109,6 +113,92 @@ class _RecommendedProductLoaderState extends State<RecommendedProductLoader> {
             'market rate price',
           ),
         ),
+      ),
+    );
+  }
+}
+
+// cart product loader
+class CartLoader extends StatefulWidget {
+  const CartLoader({super.key});
+
+  @override
+  State<CartLoader> createState() => _CartLoaderState();
+}
+
+class _CartLoaderState extends State<CartLoader> {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 5),
+        height: 90,
+        padding: EdgeInsets.only(top: 5, left: 10),
+        decoration: BoxDecoration(
+          color: Colors.blue.shade200,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        // child: Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       mainAxisAlignment: MainAxisAlignment.end,
+        //       children: [
+        //         Text(''),
+        //         Text(''),
+        //         Row(
+        //           spacing: 5,
+        //           children: [
+        //             Text(''),
+        //             Text(''),
+        //             Text(''),
+        //           ],
+        //         ),
+        //       ],
+        //     ),
+        //     Column(
+        //       spacing: 10,
+        //       mainAxisAlignment: MainAxisAlignment.end,
+        //       children: [
+        //         Text(''),
+        //         Row(
+        //           children: [
+        //             Container(
+        //               width: 45,
+        //               height: 35,
+        //               decoration: BoxDecoration(
+        //                 // color: errorColor,
+        //                 borderRadius: BorderRadius.only(
+        //                   topLeft: Radius.circular(10),
+        //                 ),
+        //               ),
+        //               child: Icon(
+        //                 Icons.remove,
+        //                 // color: Colors.white,
+        //               ),
+        //             ),
+        //             Container(
+        //               width: 45,
+        //               height: 35,
+        //               decoration: BoxDecoration(
+        //                 // color: primaryColor,
+        //                 borderRadius:
+        //                     BorderRadius.only(bottomRight: Radius.circular(10)),
+        //               ),
+        //               child: Icon(
+        //                 Icons.add,
+        //                 // color: Colors.white,
+        //               ),
+        //             ),
+        //           ],
+        //         )
+        //       ],
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }

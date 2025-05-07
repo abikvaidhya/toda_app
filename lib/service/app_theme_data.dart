@@ -8,6 +8,20 @@ class AppThemeData {
     useMaterial3: true,
     fontFamily: 'Quicksand',
     iconTheme: IconThemeData(color: primaryColor),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+      elevation: 5,
+      alignment: Alignment.center,
+      maximumSize: Size(180, 55),
+      minimumSize: Size(180, 55),
+      fixedSize: Size(180, 55),
+      iconSize: 25,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      backgroundColor: primaryColor,
+      foregroundColor: Colors.white,
+    )),
     buttonTheme: ButtonThemeData(
       buttonColor: primaryColor,
     ),
@@ -15,10 +29,10 @@ class AppThemeData {
         backgroundColor: primaryColor,
         iconTheme: IconThemeData(color: Colors.white),
         titleTextStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.black87,
+          fontSize: 18,
+          color: Colors.white,
           height: 2,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.bold,
         )),
     textTheme: TextTheme(
       // content

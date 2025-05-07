@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BaseUnit {
   BaseUnit({
@@ -17,14 +16,14 @@ class BaseUnit {
     description = json['value'];
   }
 
-  factory BaseUnit.fromSnapShot(
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-    final docData = documentSnapshot.data()!;
-    return BaseUnit(
-        code: int.parse(documentSnapshot.id.toString()),
-        label: (docData['label']).toString(),
-        description: (docData['value']).toString());
-  }
+  // factory BaseUnit.fromSnapShot(
+  //     DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
+  //   final docData = documentSnapshot.data()!;
+  //   return BaseUnit(
+  //       code: int.parse(documentSnapshot.id.toString()),
+  //       label: (docData['label']).toString(),
+  //       description: (docData['value']).toString());
+  // }
 
   Map<String, dynamic> toJson() {
     final baseUnit = <String, dynamic>{};

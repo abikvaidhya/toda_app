@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 Product getProduct(Map<String, dynamic> str) => Product.fromJson(str);
@@ -66,32 +65,32 @@ class Product {
     image = json['image'] ?? '';
   }
 
-  factory Product.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final docData = doc.data()!;
-
-    return Product(
-      itemCode: docData['item_code'],
-      description: docData['description'],
-      baseUnit: docData['base_unit'],
-      groupID: docData['group_id'] ?? '',
-      subGroup: docData['sub_group'] ?? '',
-      supplierID: docData['supplier'] ?? 0,
-      lastCP: double.parse(docData['last_cp'].toString()),
-      taxableCP: double.parse(docData['taxable_cp'].toString()),
-      sp: double.parse(docData['sp'].toString()),
-      stock: docData['stock'] ?? 0,
-      lastPurchasedQuantity: docData['last_purchase_quantity'],
-      lastPurchasedDate: DateTime.parse(docData['last_purchase_date']),
-      salesQuantity: int.parse(docData['sales_qty'].toString()),
-      margin: double.parse(docData['margin'].toString()),
-      mrp: double.parse(docData['mrp'].toString()),
-      inStock: docData['in_stock'],
-      quantity: 1.obs,
-      offer: docData['offer'],
-      discountPerc: double.parse((docData['discount_perc'] ?? 0).toString()),
-      image: docData['image'] ?? '',
-    );
-  }
+  // factory Product.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> doc) {
+  //   final docData = doc.data()!;
+  //
+  //   return Product(
+  //     itemCode: docData['item_code'],
+  //     description: docData['description'],
+  //     baseUnit: docData['base_unit'],
+  //     groupID: docData['group_id'] ?? '',
+  //     subGroup: docData['sub_group'] ?? '',
+  //     supplierID: docData['supplier'] ?? 0,
+  //     lastCP: double.parse(docData['last_cp'].toString()),
+  //     taxableCP: double.parse(docData['taxable_cp'].toString()),
+  //     sp: double.parse(docData['sp'].toString()),
+  //     stock: docData['stock'] ?? 0,
+  //     lastPurchasedQuantity: docData['last_purchase_quantity'],
+  //     lastPurchasedDate: DateTime.parse(docData['last_purchase_date']),
+  //     salesQuantity: int.parse(docData['sales_qty'].toString()),
+  //     margin: double.parse(docData['margin'].toString()),
+  //     mrp: double.parse(docData['mrp'].toString()),
+  //     inStock: docData['in_stock'],
+  //     quantity: 1.obs,
+  //     offer: docData['offer'],
+  //     discountPerc: double.parse((docData['discount_perc'] ?? 0).toString()),
+  //     image: docData['image'] ?? '',
+  //   );
+  // }
 
   Map<String, dynamic> toJson() {
     final product = <String, dynamic>{};
