@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
-import 'package:toda_app/model/item_model.dart';
+import 'package:toda_app/model/product_model.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/view/product_UIs.dart';
 import 'package:toda_app/view/screens/product_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
 import '../controllers/app_controller.dart';
 import '../model/cart_model.dart';
-import '../model/category_model.dart';
+import '../model/product_group_model.dart';
 import '../service/constants.dart';
 
 class Dashboard extends StatefulWidget {
@@ -91,17 +91,15 @@ class _DashboardState extends State<Dashboard> {
 
                     return SizedBox(
                       height: 100,
-                      child: Expanded(
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: productController.offerProducts.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return OfferProduct(
-                                product:
-                                    productController.offerProducts[index]);
-                          },
-                        ),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: productController.offerProducts.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return OfferProduct(
+                              product:
+                                  productController.offerProducts[index]);
+                        },
                       ),
                     );
                   },
@@ -165,8 +163,7 @@ class _DashboardState extends State<Dashboard> {
                           return Text('No categories!');
                         }
 
-                        // List<ProductCategory> categories = (snapshot.data!);
-                        productController.productCategories(snapshot.data!);
+                        productController.productGroup(snapshot.data!);
 
                         return Row(
                           spacing: 5,
@@ -205,7 +202,7 @@ class _DashboardState extends State<Dashboard> {
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
                                 itemCount:
-                                    productController.productCategories.length,
+                                    productController.productGroup.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Obx(() => Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -217,19 +214,19 @@ class _DashboardState extends State<Dashboard> {
                                           padding: EdgeInsets.zero,
                                           showCheckmark: true,
                                           label: Text(productController
-                                              .productCategories[index].name),
+                                              .productGroup[index].name),
                                           labelStyle: AppThemeData
                                               .appThemeData.textTheme.bodyLarge!
                                               .copyWith(
                                                   color: productController
-                                                          .productCategories[
+                                                          .productGroup[
                                                               index]
                                                           .isSelected
                                                           .value
                                                       ? Colors.white
                                                       : Colors.black),
                                           selected: productController
-                                              .productCategories[index]
+                                              .productGroup[index]
                                               .isSelected
                                               .value,
                                           selectedColor: primaryColor,
@@ -237,9 +234,9 @@ class _DashboardState extends State<Dashboard> {
                                           checkmarkColor: Colors.white,
                                           onSelected: (bool value) {
                                             productController
-                                                .productCategories[index]
+                                                .productGroup[index]
                                                 .isSelected(!productController
-                                                    .productCategories[index]
+                                                    .productGroup[index]
                                                     .isSelected
                                                     .value);
                                             // supabaseController.allProducts.where((e)=>e.)
@@ -301,16 +298,8 @@ class _DashboardState extends State<Dashboard> {
                             ? productController.allProducts.length
                             : 6,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () => Get.to(
-                              () => ProductScreen(
-                                product: productController.allProducts[index],
-                              ),
-                              transition: Transition.cupertino,
-                            ),
-                            child: GridProduct(
-                              product: productController.allProducts[index],
-                            ),
+                          return GridProduct(
+                            product: productController.allProducts[index],
                           );
                         },
                       );

@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
-import 'package:toda_app/model/item_model.dart';
+import 'package:toda_app/controllers/product_controller.dart';
+import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/model/product_model.dart';
 import '../../service/app_theme_data.dart';
 import '../../service/constants.dart';
 
@@ -16,12 +19,21 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   CartController cartController = Get.find<CartController>();
+  ProductController productController = Get.find<ProductController>();
+  SupabaseController supabaseController = Get.find<SupabaseController>();
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   productController.getBaseUnits();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.product.description,
+        title: Text("Product description",
             style: AppThemeData.appThemeData.textTheme.labelMedium!.copyWith(
               color: Colors.white,
             )),
@@ -65,11 +77,17 @@ class _ProductScreenState extends State<ProductScreen> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        logo_white,
-                        height: 300,
-                        fit: BoxFit.cover,
-                      ),
+                      child: (widget.product.image.isEmpty)
+                          ? Image.asset(
+                              logo_white,
+                              fit: BoxFit.cover,
+                              height: 300,
+                            )
+                          : Image.memory(
+                              base64.decode((widget.product.image)),
+                              fit: BoxFit.cover,
+                              height: 300,
+                            ),
                     ),
                     Column(
                       spacing: 5,
@@ -105,9 +123,9 @@ class _ProductScreenState extends State<ProductScreen> {
                               Text(
                                 widget.product.mrp.toStringAsFixed(1),
                                 style: AppThemeData
-                                    .appThemeData.textTheme.labelLarge!
+                                    .appThemeData.textTheme.labelSmall!
                                     .copyWith(
-                                  color: Colors.black87,
+                                  color: Colors.black45,
                                   decoration: TextDecoration.lineThrough,
                                 ),
                                 maxLines: 1,
@@ -116,6 +134,44 @@ class _ProductScreenState extends State<ProductScreen> {
                             Text(widget.product.sp.toStringAsFixed(2),
                                 style: AppThemeData
                                     .appThemeData.textTheme.labelLarge),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 5,
+                          children: [
+                            Text("Base unit:",
+                                style: AppThemeData
+                                    .appThemeData.textTheme.bodyLarge),
+                            StreamBuilder(
+                              stream: supabaseController.getBaseUnit,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  debugPrint(
+                                      '>> error getting offer products: ${snapshot.error.toString()}');
+                                  return Text(
+                                      'Error getting offered products!');
+                                } else if (!snapshot.hasData) {
+                                  return Text("N/A",
+                                      style: AppThemeData
+                                          .appThemeData.textTheme.labelLarge);
+                                }
+
+                                productController.baseUnits(snapshot.data);
+
+                                return Text(
+                                    productController.baseUnits
+                                        .firstWhere((e) =>
+                                            e.code == widget.product.baseUnit)
+                                        .label,
+                                    style: AppThemeData
+                                        .appThemeData.textTheme.labelMedium);
+                              },
+                            ),
                           ],
                         ),
                       ],

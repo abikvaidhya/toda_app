@@ -1,20 +1,20 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
-class ProductCategory {
+class ProductGroup {
   late int id;
   late String name;
   late DateTime createdAt;
   late bool inStock;
   RxBool isSelected = false.obs;
 
-  ProductCategory(
+  ProductGroup(
       {required this.id,
       required this.name,
       required this.createdAt,
       required this.inStock,
       required this.isSelected});
 
-  ProductCategory.fromJson(Map<String, dynamic> json) {
+  ProductGroup.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     createdAt = DateTime.parse(json['created_at']);

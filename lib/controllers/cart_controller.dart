@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/model/cart_model.dart';
-import 'package:toda_app/model/item_model.dart';
+import 'package:toda_app/model/product_model.dart';
 
 class CartController extends GetxController {
   SupabaseController supabaseController = Get.find<SupabaseController>();

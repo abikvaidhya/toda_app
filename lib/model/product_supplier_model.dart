@@ -1,12 +1,12 @@
-class ProductVendor {
+class ProductSupplier {
   late int id;
   late String name;
   late bool inBusiness;
 
-  ProductVendor(
+  ProductSupplier(
       {required this.id, required this.name, required this.inBusiness});
 
-  ProductVendor.fromJson(Map<String, dynamic> json) {
+  ProductSupplier.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     inBusiness = json['in_business'];

@@ -7,7 +7,7 @@ Product getProduct(Map<String, dynamic> str) => Product.fromJson(str);
 String productJson(Product data) => json.encode(data.toJson());
 
 class Product {
-  late final String description, subGroup;
+  late final String description, subGroup, image;
   late final double lastCP, margin, mrp, taxableCP, sp, discountPerc;
   late final int itemCode,
       lastPurchasedQuantity,
@@ -40,6 +40,7 @@ class Product {
     required this.quantity,
     required this.offer,
     required this.discountPerc,
+    required this.image,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -62,6 +63,7 @@ class Product {
     offer = json['offer'];
     discountPerc = double.parse((json['discount_perc'] ?? 0).toString());
     quantity = 1.obs;
+    image = json['image'] ?? '';
   }
 
   factory Product.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -87,6 +89,7 @@ class Product {
       quantity: 1.obs,
       offer: docData['offer'],
       discountPerc: double.parse((docData['discount_perc'] ?? 0).toString()),
+      image: docData['image'] ?? '',
     );
   }
 

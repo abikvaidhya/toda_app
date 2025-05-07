@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/view/screens/product_screen.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/product_controller.dart';
-import '../model/item_model.dart';
+import '../model/product_model.dart';
 import '../service/app_theme_data.dart';
 import '../service/constants.dart';
 
@@ -139,14 +140,17 @@ class _GridProductState extends State<GridProduct> {
       closedBuilder: (BuildContext context, void Function() action) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
-              child: Image.asset(
-                logo_white,
-                fit: BoxFit.cover,
-                // height: ,
-              ),
+              child: (widget.product.image.isEmpty)
+                  ? Image.asset(
+                      logo_white,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.memory(
+                      base64.decode((widget.product.image)),
+                      fit: BoxFit.cover,
+                    ),
             ),
             Container(
               height: 70,
