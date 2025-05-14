@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toda_app/model/product_group_model.dart';
 import 'package:toda_app/model/product_model.dart';
+import 'package:toda_app/model/product_supplier_model.dart';
 import '../model/base_unit_model.dart';
 import '../model/cart_model.dart';
+import '../model/order_model.dart';
 import '../view/screens/home_screen.dart';
 import '../view/screens/login_screen.dart';
 
@@ -72,7 +74,7 @@ class SupabaseController extends GetxController {
       .from('products')
       .stream(primaryKey: ['id'])
       .limit(8)
-      .map((data) => data.map((e) => Product.fromJson(e)).toList());
+      .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
   // fetch item list
   Future get getAllProducts => supabase.client.from('products').select();
@@ -80,7 +82,7 @@ class SupabaseController extends GetxController {
   // stream item list
   Stream get getAllProductStream =>
       supabase.client.from('products').stream(primaryKey: ['id']).map(
-          (data) => data.map((e) => Product.fromJson(e)).toList());
+          (data) => data.map((e) => getProductFromJson(e)).toList());
 
   // fetch offer item list
   Future get getOfferProducts =>
@@ -91,7 +93,7 @@ class SupabaseController extends GetxController {
       .from('products')
       .stream(primaryKey: ['id'])
       .eq('offer', true)
-      .map((data) => data.map((e) => Product.fromJson(e)).toList());
+      .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
   // fetch category list
   Future get getProductGroups => supabase.client.from('group').select();
@@ -99,7 +101,7 @@ class SupabaseController extends GetxController {
   // stream category list
   Stream get getProductGroupStream =>
       supabase.client.from('group').stream(primaryKey: ['id']).map(
-          (data) => data.map((e) => ProductGroup.fromJson(e)).toList());
+          (data) => data.map((e) => getProductGroupFromJson(e)).toList());
 
   // fetch base units
   Future get getBaseUnits => supabase.client.from('base_units').select();
@@ -107,7 +109,7 @@ class SupabaseController extends GetxController {
   // stream base unit
   Stream get getBaseUnitStream =>
       supabase.client.from('base_units').stream(primaryKey: ['id']).map(
-          (data) => data.map((e) => BaseUnit.fromJson(e)).toList());
+          (data) => data.map((e) => getBaseUnitFromJson(e)).toList());
 
   // fetch suppliers list
   Future get getSuppliers => supabase.client.from('suppliers').select();
@@ -115,7 +117,7 @@ class SupabaseController extends GetxController {
   // stream suppliers list
   Stream get getSupplierStream =>
       supabase.client.from('suppliers').stream(primaryKey: ['id']).map(
-          (data) => data.map((e) => Product.fromJson(e)).toList());
+          (data) => data.map((e) => getProductSupplierFromJson(e)).toList());
 
   // fetch cart items
   Future get getCartData => supabase.client
@@ -131,16 +133,16 @@ class SupabaseController extends GetxController {
       .stream(primaryKey: ['id'])
       .eq('customer_id', getUser!.id)
       .limit(1)
-      .map((data) => data.map((e) => Cart.fromJson(e)).toList());
+      .map((data) => data.map((e) => getCartFromJson(e)).toList());
 
   // create new cart
-  createNewCart({required Cart cart}) async => await supabase.client
+  Future createNewCart({required Cart cart}) async => await supabase.client
       .from('cart')
-      .insert(cart.toJson().toString())
+      .insert(cartToJson(cart))
       .catchError((e) => throw e);
 
   // update cart
-  updateCart({
+  Future updateCart({
     required Cart cart,
   }) async =>
       await supabase.client
@@ -153,9 +155,15 @@ class SupabaseController extends GetxController {
           .catchError((e) => throw e);
 
   // delete cart
-  deleteCart({required int id}) async => await supabase.client
+  Future deleteCart() async => await supabase.client
       .from('cart')
       .delete()
-      .eq('customer_id', id)
+      .eq('customer_id', getUser!.id)
+      .catchError((e) => throw e);
+
+  // place order
+  Future placeOrder({required Order order}) async => await supabase.client
+      .from('orders')
+      .insert(orderToJson(order))
       .catchError((e) => throw e);
 }

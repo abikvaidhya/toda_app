@@ -20,10 +20,14 @@ class AppController extends GetxController {
   onInit() {
     super.onInit();
     appUser = (currentUser!).obs;
+
+    debugPrint('>> user id: ${supabaseController.getUser!.id}');
+    debugPrint('>> user email: ${supabaseController.getUser!.email}');
   }
 
   User? get currentUser =>
       supabaseController.getUser; // get current logged in user
+
   navigateDashboard({required int id, bool changeNav = false}) {
     if (changeNav) {
       navBarController.value.jumpTo(id);

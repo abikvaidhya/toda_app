@@ -23,6 +23,12 @@ class ProductController extends GetxController {
   RxList<ProductGroup> productGroup = <ProductGroup>[].obs;
   RxList<BaseUnit> baseUnits = <BaseUnit>[].obs;
 
+  @override
+  onInit() {
+    super.onInit();
+    getAllProducts();
+  }
+
   clearProductCache() {
     offerProducts.clear();
     allProducts.clear();
@@ -31,33 +37,7 @@ class ProductController extends GetxController {
   }
 
   Future getAllProducts() async {
-    allProducts(await supabaseController.getAllProducts);
+    var temp = await supabaseController.getAllProducts;
+    allProducts((temp as List).map((e) => getProductFromJson(e)).toList());
   }
-
-// Future getBaseUnits() async {
-//   loadingBaseUnits(true);
-//   try {
-//     if (baseUnits.isEmpty) {
-//       debugPrint('>> getting base units');
-//       debugPrint(supabaseController.getBaseUnit.first.)
-//       baseUnits(await supabaseController.getBaseUnit
-//           .asyncMap((e) => BaseUnit.fromJson(e))
-//           .toList());
-//       // baseUnits((await supabaseController.getBaseUnit)
-//       //     .toList()
-//       //     .map((e) => BaseUnit.fromJson(e))
-//       //     .toList());
-//     }
-//   } catch (e) {
-//     baseUnits.clear();
-//     debugPrint('>> error getting base units: ${e.toString()}');
-//     // UiUtils().showSnackBar(
-//     //   title: 'Error',
-//     //   message: e.toString(),
-//     //   isError: true,
-//     // );
-//   } finally {
-//     loadingBaseUnits(false);
-//   }
-// }
 }

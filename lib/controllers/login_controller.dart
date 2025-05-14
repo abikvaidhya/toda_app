@@ -6,9 +6,6 @@ import 'package:toda_app/service/local_storage_helper.dart';
 import 'package:toda_app/view/screens/home_screen.dart';
 import 'package:toda_app/view/ui_utils.dart';
 
-// abikvaidhya@gmail.com
-// password1
-
 // abik.vaidhya@gmail.com
 // qwerqwer
 
@@ -16,7 +13,7 @@ class LoginController extends GetxController {
   LocalStorageHelper localStorageHelper = LocalStorageHelper();
   SupabaseController supabaseController = Get.find<SupabaseController>();
 
-  var formKey = GlobalKey<FormState>();
+  var loginFormKey = GlobalKey<FormState>();
   RxBool processing = false.obs,
       showPassword = false.obs,
       usingEmail = true.obs;
@@ -25,7 +22,7 @@ class LoginController extends GetxController {
       passwordField = TextEditingController().obs;
 
   login() async {
-    if (formKey.currentState!.validate()) {
+    if (loginFormKey.currentState!.validate()) {
       debugPrint('>> ${usernameField.value.text}');
       debugPrint('>> ${passwordField.value.text}');
 

@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
+import 'package:toda_app/view/screens/order_confirmation_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
+import 'package:toda_app/view/ui_utils.dart';
 import '../controllers/app_controller.dart';
 import '../service/constants.dart';
 
@@ -22,7 +24,6 @@ class _CartState extends State<Cart> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     cartController.getCart();
   }
@@ -284,119 +285,125 @@ class _CartState extends State<Cart> {
                                 ),
                               ),
                             ),
-
-                            // cart submission section
-                            Column(
-                              spacing: 2,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Divider(
-                                  endIndent: 20,
-                                  indent: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  spacing: 5,
-                                  children: [
-                                    Text(
-                                      'Total product count:',
-                                      style: AppThemeData
-                                          .appThemeData.textTheme.bodyLarge,
-                                    ),
-                                    Obx(
-                                      () => Text(
-                                        cartController.cartItems.length
-                                            .toString(),
-                                        style: AppThemeData
-                                            .appThemeData.textTheme.labelMedium,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  spacing: 5,
-                                  children: [
-                                    Text(
-                                      'Sum total: Rs.',
-                                      style: AppThemeData
-                                          .appThemeData.textTheme.bodyLarge,
-                                    ),
-                                    Obx(
-                                      () => Text(
-                                        cartController.costTotal
-                                            .toStringAsFixed(2),
-                                        style: AppThemeData
-                                            .appThemeData.textTheme.labelMedium,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                      style: AppThemeData.appThemeData
-                                          .elevatedButtonTheme.style!
-                                          .copyWith(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all<
-                                                      Color>(errorColor)),
-                                      onPressed: () {},
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        spacing: 10,
-                                        children: [
-                                          Text(
-                                            'Clear',
-                                            style: AppThemeData.appThemeData
-                                                .textTheme.labelMedium!
-                                                .copyWith(color: Colors.white),
-                                          ),
-                                          Icon(
-                                            Icons.delete_forever_outlined,
-                                            color: Colors.white,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {},
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        spacing: 10,
-                                        children: [
-                                          Text(
-                                            'Confirm',
-                                            style: AppThemeData.appThemeData
-                                                .textTheme.labelMedium!
-                                                .copyWith(color: Colors.white),
-                                          ),
-                                          Icon(
-                                            Icons.shopping_bag_outlined,
-                                            color: Colors.white,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 100,
-                            )
                           ],
                         ),
                 );
               },
             ),
           ),
+
+          // cart submission section
+          Obx(
+            () => (cartController.fetchingCart.value)
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  )
+                : Column(
+                    spacing: 5,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Divider(
+                        endIndent: 20,
+                        indent: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 5,
+                        children: [
+                          Text(
+                            'Total product count:',
+                            style:
+                                AppThemeData.appThemeData.textTheme.bodyLarge,
+                          ),
+                          Obx(
+                            () => Text(
+                              cartController.cartItems.length.toString(),
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelMedium,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 5,
+                        children: [
+                          Text(
+                            'Sum total: Rs.',
+                            style:
+                                AppThemeData.appThemeData.textTheme.bodyLarge,
+                          ),
+                          Obx(
+                            () => Text(
+                              cartController.activeCart.value.totalAmount
+                                  .toStringAsFixed(2),
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelMedium,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: AppThemeData
+                                .appThemeData.elevatedButtonTheme.style!
+                                .copyWith(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            errorColor)),
+                            onPressed: () =>
+                                UiUtils().deleteCartConfirmationBottomSheet(),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 5,
+                              children: [
+                                Text(
+                                  'Clear',
+                                  style: AppThemeData
+                                      .appThemeData.textTheme.labelMedium!
+                                      .copyWith(color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.delete_forever_outlined,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () =>
+                                Get.to(() => OrderConfirmationScreen()),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 5,
+                              children: [
+                                Text(
+                                  'Confirm',
+                                  style: AppThemeData
+                                      .appThemeData.textTheme.labelMedium!
+                                      .copyWith(color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.shopping_bag_outlined,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+          ),
+          SizedBox(
+            height: 100,
+          )
         ],
       ),
     );

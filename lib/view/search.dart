@@ -42,7 +42,7 @@ class _SearchState extends State<Search> {
                   child: TextFormField(
                     controller: productController.searchField.value,
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.text,
                     onFieldSubmitted: (q) {},
                     decoration: InputDecoration(
                       border: InputBorder.none,

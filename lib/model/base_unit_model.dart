@@ -1,3 +1,4 @@
+BaseUnit getBaseUnitFromJson(Map<String, dynamic> str) => BaseUnit.fromJson(str);
 
 class BaseUnit {
   BaseUnit({
@@ -15,15 +16,6 @@ class BaseUnit {
     label = json['label'];
     description = json['value'];
   }
-
-  // factory BaseUnit.fromSnapShot(
-  //     DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-  //   final docData = documentSnapshot.data()!;
-  //   return BaseUnit(
-  //       code: int.parse(documentSnapshot.id.toString()),
-  //       label: (docData['label']).toString(),
-  //       description: (docData['value']).toString());
-  // }
 
   Map<String, dynamic> toJson() {
     final baseUnit = <String, dynamic>{};

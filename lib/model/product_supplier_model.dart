@@ -1,3 +1,6 @@
+ProductSupplier getProductSupplierFromJson(Map<String, dynamic> str) =>
+    ProductSupplier.fromJson(str);
+
 class ProductSupplier {
   late int id;
   late String name;

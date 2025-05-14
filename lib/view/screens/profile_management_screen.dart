@@ -241,7 +241,8 @@ class _ProfileManagementScreenState extends State<ProfileManagementScreen> {
                               ),
                               // old password
                               Container(
-                                padding: EdgeInsets.all(2),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: primaryColor),
                                   borderRadius: BorderRadius.all(
@@ -281,7 +282,8 @@ class _ProfileManagementScreenState extends State<ProfileManagementScreen> {
                               ),
                               // new password
                               Container(
-                                padding: EdgeInsets.all(2),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: primaryColor),
                                   borderRadius: BorderRadius.all(
@@ -321,7 +323,8 @@ class _ProfileManagementScreenState extends State<ProfileManagementScreen> {
                               ),
                               //  verify new password
                               Container(
-                                padding: EdgeInsets.all(2),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: primaryColor),
                                   borderRadius: BorderRadius.all(

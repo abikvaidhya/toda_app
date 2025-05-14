@@ -22,7 +22,7 @@ class _LoginFormState extends State<LoginForm> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Obx(
         () => Form(
-          key: loginController.formKey,
+          key: loginController.loginFormKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 10,

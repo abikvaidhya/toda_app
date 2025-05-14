@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 
-Product getProduct(Map<String, dynamic> str) => Product.fromJson(str);
+Product getProductFromJson(Map<String, dynamic> str) => Product.fromJson(str);
 
-String productJson(Product data) => json.encode(data.toJson());
+String productToJson(Product data) => json.encode(data.toJson());
 
 class Product {
   late final String description, subGroup, image;

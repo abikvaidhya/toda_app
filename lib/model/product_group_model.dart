@@ -1,5 +1,7 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
+ProductGroup getProductGroupFromJson(Map<String, dynamic> str) => ProductGroup.fromJson(str);
+
 class ProductGroup {
   late int id;
   late String name;
