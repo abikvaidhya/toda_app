@@ -31,6 +31,7 @@ dependencies:
   firebase_app_check: ^0.3.2+5
   supabase_flutter: ^2.0.0
   animated_notch_bottom_bar: ^1.0.0
+  easy_stepper: ^0.8.5+1
 
 dev_dependencies:
   flutter_test:

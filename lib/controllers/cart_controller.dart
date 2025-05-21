@@ -28,13 +28,8 @@ class CartController extends GetxController {
     activeCart = Cart(
       items: {},
       totalAmount: 0.0,
-      placedIn: DateTime.now(),
-      address: '',
-      customerName: '',
+      createdAt: DateTime.now(),
       customerId: supabaseController.getUser!.id,
-      customerPhoneNumber: '',
-      isActive: true,
-      isDelivery: true,
     ).obs;
     updateCartTotal(create: true);
   }
@@ -101,10 +96,10 @@ class CartController extends GetxController {
   }
 
   // clear cart
-  clearCart() async {
+  Future clearCart() async {
     processingCart(true);
     try {
-      supabaseController.deleteCart(); // delete cart instance
+      await supabaseController.deleteCart(); // delete cart instance
       getCart(); // create cart instance
     } catch (e) {
       debugPrint('>> error clearing cart in database!: ${e.toString()}');
@@ -127,12 +122,16 @@ class CartController extends GetxController {
         totalAmount: activeCart.value.totalAmount,
         status: 1,
         customerId: supabaseController.getUser!.id,
+        customerName: customerName.value.text,
         phoneNumber: phoneNumber.value.text,
         products: activeCart.value.items,
       ).obs; // preparing order model for insert in database
       await supabaseController.placeOrder(
         order: activeOrder.value,
       ); //insert order to database
+
+      await clearCart(); // clear cart
+
       orderPlaced(true);
     } catch (e) {
       debugPrint('>> error confirming order: ${e.toString()}');

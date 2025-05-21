@@ -48,13 +48,13 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(25),
-                        ),
-                        color: Colors.white70,
-                      ),
+                      // decoration: BoxDecoration(
+                      //   border: Border.all(color: primaryColor),
+                      //   borderRadius: BorderRadius.all(
+                      //     Radius.circular(25),
+                      //   ),
+                      //   color: Colors.white70,
+                      // ),
                       child: Center(
                         child: TextFormField(
                           controller: cartController.customerName.value,
@@ -63,7 +63,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           onFieldSubmitted: (q) {},
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Enter your name',
+                            labelText: 'Enter your name*',
                             labelStyle: AppThemeData
                                 .appThemeData.textTheme.bodyMedium!
                                 .copyWith(color: Colors.black87),
@@ -73,6 +73,13 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                             ),
                           ),
                           maxLength: 20,
+                          validator: (_) {
+                            if (_!.trim().isEmpty) {
+                              return 'Please enter your name';
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -81,13 +88,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(25),
-                        ),
-                        color: Colors.white70,
-                      ),
                       child: Center(
                         child: TextFormField(
                           controller: cartController.phoneNumber.value,
@@ -123,13 +123,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(25),
-                        ),
-                        color: Colors.white70,
-                      ),
                       child: Center(
                         child: TextFormField(
                           controller: cartController.addressField.value,
@@ -157,7 +150,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
 
               // cart submission section
               Column(
-                // spacing: 10,
+                spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Divider(
@@ -168,23 +161,35 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        spacing: 5,
-                        children: [
-                          Text(
-                            'Sum total: Rs.',
-                            style:
-                                AppThemeData.appThemeData.textTheme.bodyLarge,
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        height: 55,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: primaryColor),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25),
                           ),
-                          Obx(
-                            () => Text(
-                              cartController.activeCart.value.totalAmount
-                                  .toStringAsFixed(2),
-                              style: AppThemeData
-                                  .appThemeData.textTheme.labelMedium,
+                          color: Colors.white70,
+                        ),
+                        child: Row(
+                          spacing: 2,
+                          children: [
+                            Text(
+                              'Sum total: Rs.',
+                              style:
+                                  AppThemeData.appThemeData.textTheme.bodyLarge,
                             ),
-                          ),
-                        ],
+                            Obx(
+                              () => Text(
+                                cartController.activeCart.value.totalAmount
+                                    .toStringAsFixed(2),
+                                style: AppThemeData
+                                    .appThemeData.textTheme.labelSmall!
+                                    .copyWith(color: primaryColor),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {

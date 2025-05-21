@@ -7,8 +7,8 @@ class Order {
   late DateTime createdAt, completedOn;
   late double totalAmount;
   late int status;
-  late String customerId, phoneNumber;
-  late Map<String,String> products;
+  late String customerId, phoneNumber, customerName;
+  late Map<String, String> products;
 
   Order({
     required this.orderId,
@@ -17,6 +17,7 @@ class Order {
     required this.totalAmount,
     required this.status,
     required this.customerId,
+    required this.customerName,
     required this.phoneNumber,
     required this.products,
   });
@@ -28,6 +29,7 @@ class Order {
     totalAmount = json["total_amount"];
     status = json["order_status"];
     customerId = json["customer_id"];
+    customerName = json["customer_name"];
     phoneNumber = json["customer_phone_number"];
     products = json["products"];
   }
@@ -40,6 +42,7 @@ class Order {
     orderModel["total_amount"] = totalAmount.toStringAsFixed(2);
     orderModel["order_status"] = status.toString();
     orderModel["customer_id"] = customerId.toString();
+    orderModel["customer_name"] = customerName.toString();
     orderModel["customer_phone_number"] = phoneNumber.toString();
     orderModel["products"] = products.toString();
     return orderModel;

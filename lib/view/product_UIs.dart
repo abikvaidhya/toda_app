@@ -285,19 +285,26 @@ class _ProductDetailState extends State<ProductDetail> {
               children: [
                 Expanded(
                   child: Container(
+
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        opacity: 0.4,
-                        image: AssetImage(
-                          background_dark_green,
-                        ),
-                        fit: BoxFit.cover,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
                       ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+                      color: Colors.white,
                     ),
+                    // decoration: BoxDecoration(
+                    //   image: DecorationImage(
+                    //     opacity: 0.4,
+                    //     image: AssetImage(
+                    //       background_dark_green,
+                    //     ),
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    //   borderRadius: BorderRadius.only(
+                    //     topLeft: Radius.circular(20),
+                    //     topRight: Radius.circular(20),
+                    //   ),
+                    // ),
                   ),
                 ),
               ],
@@ -305,195 +312,186 @@ class _ProductDetailState extends State<ProductDetail> {
 
             // product detail section
             SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+              child: Column(
+                spacing: 20,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: (widget.product.image.isEmpty)
+                        ? Image.asset(
+                            logo_white,
+                            fit: BoxFit.cover,
+                            height: 300,
+                          )
+                        : Image.memory(
+                            base64.decode((widget.product.image)),
+                            fit: BoxFit.cover,
+                            height: 300,
+                          ),
                   ),
-                  color: Colors.white70,
-                ),
-                child: Column(
-                  spacing: 20,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: (widget.product.image.isEmpty)
-                          ? Image.asset(
-                              logo_white,
-                              fit: BoxFit.cover,
-                              height: 300,
-                            )
-                          : Image.memory(
-                              base64.decode((widget.product.image)),
-                              fit: BoxFit.cover,
-                              height: 300,
-                            ),
-                    ),
-                    Column(
-                      spacing: 5,
-                      children: [
-                        Divider(
-                          endIndent: 20,
-                          indent: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 5,
-                          children: [
-                            Text("Product name:",
-                                style: AppThemeData
-                                    .appThemeData.textTheme.bodyLarge),
-                            Text(widget.product.description,
-                                style: AppThemeData
-                                    .appThemeData.textTheme.labelSmall),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 5,
-                          children: [
-                            Text("Product price:",
-                                style: AppThemeData
-                                    .appThemeData.textTheme.bodyLarge),
-                            Text("Rs.",
-                                style: AppThemeData
-                                    .appThemeData.textTheme.labelSmall),
-                            if (widget.product.mrp
-                                .isGreaterThan(widget.product.sp))
-                              Text(
-                                widget.product.mrp.toStringAsFixed(1),
-                                style: AppThemeData
-                                    .appThemeData.textTheme.labelSmall!
-                                    .copyWith(
-                                  color: Colors.black45,
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                  Column(
+                    spacing: 5,
+                    children: [
+                      Divider(
+                        endIndent: 20,
+                        indent: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 5,
+                        children: [
+                          Text("Product name:",
+                              style: AppThemeData
+                                  .appThemeData.textTheme.bodyLarge),
+                          Text(widget.product.description,
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelSmall),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 5,
+                        children: [
+                          Text("Product price:",
+                              style: AppThemeData
+                                  .appThemeData.textTheme.bodyLarge),
+                          Text("Rs.",
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelSmall),
+                          if (widget.product.mrp
+                              .isGreaterThan(widget.product.sp))
+                            Text(
+                              widget.product.mrp.toStringAsFixed(1),
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelSmall!
+                                  .copyWith(
+                                color: Colors.black45,
+                                decoration: TextDecoration.lineThrough,
                               ),
-                            Text(widget.product.sp.toStringAsFixed(2),
-                                style: AppThemeData
-                                    .appThemeData.textTheme.labelLarge),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 5,
-                          children: [
-                            Text("Base unit:",
-                                style: AppThemeData
-                                    .appThemeData.textTheme.bodyLarge),
-                            StreamBuilder(
-                              stream: supabaseController.getBaseUnitStream,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  debugPrint(
-                                      '>> error getting offer products: ${snapshot.error.toString()}');
-                                  return Text(
-                                      'Error getting offered products!');
-                                } else if (!snapshot.hasData) {
-                                  return Text("N/A",
-                                      style: AppThemeData
-                                          .appThemeData.textTheme.labelLarge);
-                                }
-
-                                productController.baseUnits(snapshot.data);
-
-                                return Text(
-                                    productController.baseUnits
-                                        .firstWhere((e) =>
-                                            e.code == widget.product.baseUnit)
-                                        .label,
-                                    style: AppThemeData
-                                        .appThemeData.textTheme.labelMedium);
-                              },
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Obx(
-                      () => ((cartController.cartItems.indexWhere((e) =>
-                                  widget.product.itemCode == e.itemCode) !=
-                              (-1)))
-                          ? Column(
-                              spacing: 5,
-                              children: [
-                                Divider(
-                                  endIndent: 20,
-                                  indent: 20,
-                                ),
-                                Text("Product quantity in cart:",
+                          Text(widget.product.sp.toStringAsFixed(2),
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelLarge),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 5,
+                        children: [
+                          Text("Base unit:",
+                              style: AppThemeData
+                                  .appThemeData.textTheme.bodyLarge),
+                          StreamBuilder(
+                            stream: supabaseController.getBaseUnitStream,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                debugPrint(
+                                    '>> error getting offer products: ${snapshot.error.toString()}');
+                                return Text(
+                                    'Error getting offered products!');
+                              } else if (!snapshot.hasData) {
+                                return Text("N/A",
                                     style: AppThemeData
-                                        .appThemeData.textTheme.bodyLarge),
-                                Text(
-                                    "x${cartController.cartItems.firstWhere((e) => e.itemCode == widget.product.itemCode).quantity.toString()}",
-                                    style: AppThemeData
-                                        .appThemeData.textTheme.labelMedium),
-                                Text("Product price on cart:",
-                                    style: AppThemeData
-                                        .appThemeData.textTheme.bodyLarge),
-                                if (widget.product.mrp
-                                    .isGreaterThan(widget.product.sp))
-                                  Row(
-                                    spacing: 5,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Rs.",
-                                          style: AppThemeData.appThemeData
-                                              .textTheme.labelSmall),
-                                      Text(
-                                        (widget.product.mrp *
-                                                cartController.cartItems
-                                                    .firstWhere((e) =>
-                                                        e.itemCode ==
-                                                        widget.product.itemCode)
-                                                    .quantity
-                                                    .value)
-                                            .toStringAsFixed(1),
-                                        style: AppThemeData
-                                            .appThemeData.textTheme.labelLarge!
-                                            .copyWith(
-                                          color: Colors.black87,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
+                                        .appThemeData.textTheme.labelLarge);
+                              }
+
+                              productController.baseUnits(snapshot.data);
+
+                              return Text(
+                                  productController.baseUnits
+                                      .firstWhere((e) =>
+                                          e.code == widget.product.baseUnit)
+                                      .label,
+                                  style: AppThemeData
+                                      .appThemeData.textTheme.labelMedium);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Obx(
+                    () => ((cartController.cartItems.indexWhere((e) =>
+                                widget.product.itemCode == e.itemCode) !=
+                            (-1)))
+                        ? Column(
+                            spacing: 5,
+                            children: [
+                              Divider(
+                                endIndent: 20,
+                                indent: 20,
+                              ),
+                              Text("Product quantity in cart:",
+                                  style: AppThemeData
+                                      .appThemeData.textTheme.bodyLarge),
+                              Text(
+                                  "x${cartController.cartItems.firstWhere((e) => e.itemCode == widget.product.itemCode).quantity.toString()}",
+                                  style: AppThemeData
+                                      .appThemeData.textTheme.labelMedium),
+                              Text("Product price on cart:",
+                                  style: AppThemeData
+                                      .appThemeData.textTheme.bodyLarge),
+                              if (widget.product.mrp
+                                  .isGreaterThan(widget.product.sp))
                                 Row(
                                   spacing: 5,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Rs.",
-                                        style: AppThemeData
-                                            .appThemeData.textTheme.labelSmall),
+                                        style: AppThemeData.appThemeData
+                                            .textTheme.labelSmall),
                                     Text(
-                                        (widget.product.sp *
-                                                cartController.cartItems
-                                                    .firstWhere((e) =>
-                                                        e.itemCode ==
-                                                        widget.product.itemCode)
-                                                    .quantity
-                                                    .value)
-                                            .toStringAsFixed(2),
-                                        style: AppThemeData
-                                            .appThemeData.textTheme.labelLarge),
+                                      (widget.product.mrp *
+                                              cartController.cartItems
+                                                  .firstWhere((e) =>
+                                                      e.itemCode ==
+                                                      widget.product.itemCode)
+                                                  .quantity
+                                                  .value)
+                                          .toStringAsFixed(1),
+                                      style: AppThemeData
+                                          .appThemeData.textTheme.labelLarge!
+                                          .copyWith(
+                                        color: Colors.black87,
+                                        decoration:
+                                            TextDecoration.lineThrough,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ],
                                 ),
-                              ],
-                            )
-                          : SizedBox.shrink(),
-                    ),
-                  ],
-                ),
+                              Row(
+                                spacing: 5,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Rs.",
+                                      style: AppThemeData
+                                          .appThemeData.textTheme.labelSmall),
+                                  Text(
+                                      (widget.product.sp *
+                                              cartController.cartItems
+                                                  .firstWhere((e) =>
+                                                      e.itemCode ==
+                                                      widget.product.itemCode)
+                                                  .quantity
+                                                  .value)
+                                          .toStringAsFixed(2),
+                                      style: AppThemeData
+                                          .appThemeData.textTheme.labelLarge),
+                                ],
+                              ),
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                  ),
+                ],
               ),
             )
           ],
