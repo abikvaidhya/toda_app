@@ -13,15 +13,8 @@ class CartController extends GetxController {
   AppController appController = Get.find<AppController>();
   ProductController productController = Get.find<ProductController>();
   late Rx<Cart> activeCart;
-  late Rx<Order> activeOrder;
   RxList<Product> cartItems = <Product>[].obs;
-  Rx<TextEditingController> addressField = TextEditingController().obs,
-      phoneNumber = TextEditingController().obs,
-      customerName = TextEditingController().obs;
-  RxBool processingOrder = false.obs,
-      orderPlaced = false.obs,
-      processingCart = false.obs,
-      fetchingCart = false.obs;
+  RxBool processingCart = false.obs, fetchingCart = false.obs;
 
   // create new cart instance
   createCart() async {
@@ -40,21 +33,28 @@ class CartController extends GetxController {
     try {
       var data = await supabaseController.getCartData;
 
-      activeCart =
-          Cart.fromJson(data).obs; // retrieved cart instance from database
+      if (data == null) {
+        debugPrint('>> creating new cart instance');
+        createCart(); // new cart instance
+      } else {
+        debugPrint('>> got cart instance from db');
+        activeCart =
+            Cart.fromJson(data).obs; // retrieved cart instance from database
 
-      cartItems.clear(); // clear cart products
+        cartItems.clear(); // clear cart products
 
-      for (var key in activeCart.value.items.keys) {
-        int index = productController.allProducts
-            .indexWhere((product) => product.itemCode == int.parse(key));
+        for (var key in activeCart.value.items.keys) {
+          int index = productController.allProducts
+              .indexWhere((product) => product.itemCode == double.parse(key));
 
-        Product cartProduct = productController.allProducts[index];
-        cartProduct.quantity(int.parse(activeCart.value.items[key]!));
+          Product cartProduct = productController.allProducts[index];
 
-        if (index != -1) {
-          cartItems.add(productController
-              .allProducts[index]); // add cart product from database
+          cartProduct.quantity(int.parse(activeCart.value.items[key]!));
+
+          if (index != -1) {
+            cartItems.add(productController
+                .allProducts[index]); // add cart product from database
+          }
         }
       }
     } catch (e) {
@@ -111,40 +111,40 @@ class CartController extends GetxController {
   }
 
   // confirm order
-  Future placeOrder() async {
-    processingOrder(true);
-    orderPlaced(false);
-    try {
-      activeOrder = Order(
-        orderId: null,
-        createdAt: DateTime.now(),
-        completedOn: DateTime.now(),
-        totalAmount: activeCart.value.totalAmount,
-        status: 1,
-        customerId: supabaseController.getUser!.id,
-        customerName: customerName.value.text,
-        phoneNumber: phoneNumber.value.text,
-        products: activeCart.value.items,
-      ).obs; // preparing order model for insert in database
-      await supabaseController.placeOrder(
-        order: activeOrder.value,
-      ); //insert order to database
-
-      await clearCart(); // clear cart
-
-      orderPlaced(true);
-    } catch (e) {
-      debugPrint('>> error confirming order: ${e.toString()}');
-      UiUtils().showSnackBar(
-          isError: true,
-          isLong: true,
-          title: 'Error placing order!',
-          message: 'Could not confirm your order at the moment!');
-      orderPlaced(false);
-    } finally {
-      processingOrder(false);
-    }
-  }
+  // Future placeOrder() async {
+  //   processingOrder(true);
+  //   orderPlaced(false);
+  //   try {
+  //     activeOrder = Order(
+  //       orderId: null,
+  //       createdAt: DateTime.now(),
+  //       completedOn: DateTime.now(),
+  //       totalAmount: activeCart.value.totalAmount,
+  //       status: 1,
+  //       customerId: supabaseController.getUser!.id,
+  //       customerName: customerName.value.text,
+  //       phoneNumber: phoneNumber.value.text,
+  //       products: activeCart.value.items,
+  //     ).obs; // preparing order model for insert in database
+  //     await supabaseController.placeOrder(
+  //       order: activeOrder.value,
+  //     ); //insert order to database
+  //
+  //     await clearCart(); // clear cart
+  //
+  //     orderPlaced(true);
+  //   } catch (e) {
+  //     debugPrint('>> error confirming order: ${e.toString()}');
+  //     UiUtils().showSnackBar(
+  //         isError: true,
+  //         isLong: true,
+  //         title: 'Error placing order!',
+  //         message: 'Could not confirm your order at the moment!');
+  //     orderPlaced(false);
+  //   } finally {
+  //     processingOrder(false);
+  //   }
+  // }
 
   // add product to cart
   addToCart({required Product product}) {

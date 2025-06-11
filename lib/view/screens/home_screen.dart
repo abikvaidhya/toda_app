@@ -63,7 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
           GestureDetector(
             onTap: () => scaffoldKey.currentState!.openEndDrawer(),
             onLongPress: () => appController.clearAppStorage(),
-            child: Image.asset(app_logo),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: Image.asset(
+                app_logo,
+                color: tertiaryColor,
+                height: 50,
+              ),
+            ),
           ),
         ],
       ),

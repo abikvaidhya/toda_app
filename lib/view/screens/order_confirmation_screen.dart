@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toda_app/controllers/order_controller.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/ui_utils.dart';
 import '../../controllers/cart_controller.dart';
@@ -15,9 +16,17 @@ class OrderConfirmationScreen extends StatefulWidget {
 }
 
 class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
+  OrderController orderController = Get.put(OrderController());
   CartController cartController = Get.find<CartController>();
   SupabaseController supabaseController = Get.find<SupabaseController>();
   var customerInformationKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    orderController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,16 +57,9 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(color: primaryColor),
-                      //   borderRadius: BorderRadius.all(
-                      //     Radius.circular(25),
-                      //   ),
-                      //   color: Colors.white70,
-                      // ),
                       child: Center(
                         child: TextFormField(
-                          controller: cartController.customerName.value,
+                          controller: orderController.customerName.value,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.name,
                           onFieldSubmitted: (q) {},
@@ -90,7 +92,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Center(
                         child: TextFormField(
-                          controller: cartController.phoneNumber.value,
+                          controller: orderController.phoneNumber.value,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.phone,
                           onFieldSubmitted: (q) {},
@@ -109,7 +111,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           validator: (_) {
                             if (_!.trim().isEmpty) {
                               return 'Please enter your phone number';
-                            } else if (!_.trim().isNumericOnly) {
+                            } else if (!_.trim().isNumericOnly ||
+                                _.toString().length != 10) {
                               return 'Please enter a valid phone number';
                             } else {
                               return null;
@@ -125,7 +128,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Center(
                         child: TextFormField(
-                          controller: cartController.addressField.value,
+                          controller: orderController.addressField.value,
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.streetAddress,
                           onFieldSubmitted: (q) {},
@@ -194,9 +197,10 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                       ElevatedButton(
                         onPressed: () {
                           if (customerInformationKey.currentState!.validate()) {
+                            orderController.processingOrder(false);
                             UiUtils().orderConfirmationBottomSheet(
                                 phoneNumber:
-                                    cartController.phoneNumber.value.text);
+                                    orderController.phoneNumber.value.text);
                           }
                         },
                         child: Row(

@@ -9,7 +9,6 @@ import 'package:toda_app/view/screens/all_products_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
 import '../controllers/app_controller.dart';
 import '../model/product_model.dart';
-import '../service/constants.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -38,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
+          spacing: 10,
           children: [
             // top offers section
             Column(
@@ -52,54 +51,62 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 if (productController.offerProducts.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                    ),
-                    child: Text('Top Offers',
-                        style: AppThemeData.appThemeData.textTheme.labelMedium),
-                  ),
-                StreamBuilder(
-                  stream: supabaseController.getOfferProductStream,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: 3,
-                          itemBuilder: (BuildContext context, int index) {
-                            return OfferProductLoader();
-                          },
+                  Column(
+                    spacing: 10,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0,
                         ),
-                      );
-                    } else if (snapshot.hasError) {
-                      debugPrint(
-                          '>> error getting offer products: ${snapshot.error.toString()}');
-                      return Text('Error getting offered products!');
-                    } else if (!snapshot.hasData) {
-                      return SizedBox.shrink();
-                    }
-
-                    // List<Product> offerProducts = (snapshot.data!);
-                    productController.offerProducts(snapshot.data);
-
-                    return SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: productController.offerProducts.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return OfferProduct(
-                              product: productController.offerProducts[index]);
-                        },
+                        child: Text('Top Offers',
+                            style: AppThemeData
+                                .appThemeData.textTheme.labelMedium),
                       ),
-                    );
-                  },
-                )
+                      StreamBuilder(
+                        stream: supabaseController.getOfferProductStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return SizedBox(
+                              height: 100,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: 3,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return OfferProductLoader();
+                                },
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            debugPrint(
+                                '>> error getting offer products: ${snapshot.error.toString()}');
+                            return Text('Error getting offered products!');
+                          } else if (!snapshot.hasData) {
+                            return SizedBox.shrink();
+                          }
+
+                          // List<Product> offerProducts = (snapshot.data!);
+                          productController.offerProducts(snapshot.data);
+
+                          return SizedBox(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: productController.offerProducts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return OfferProduct(
+                                    product:
+                                        productController.offerProducts[index]);
+                              },
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
               ],
             ),
 
@@ -149,11 +156,13 @@ class _DashboardState extends State<Dashboard> {
                             return ProductLoader();
                           },
                         );
-                      } else if (snapshot.hasError) {
+                      }
+                      else if (snapshot.hasError) {
                         debugPrint(
                             '>> error getting items: ${snapshot.error.toString()}');
                         return Text('Error getting items!');
-                      } else if (!snapshot.hasData) {
+                      }
+                      else if (!snapshot.hasData) {
                         return Center(
                           child: Text('No items!'),
                         );
@@ -170,7 +179,7 @@ class _DashboardState extends State<Dashboard> {
                           crossAxisSpacing: 10, // spacing between columns
                         ),
                         padding: EdgeInsets.all(10.0),
-                        itemCount: products.length < 6 ? products.length : 6,
+                        itemCount: products.length < 10 ? products.length : 10,
                         itemBuilder: (context, index) {
                           return GridProduct(
                             product: products[index],

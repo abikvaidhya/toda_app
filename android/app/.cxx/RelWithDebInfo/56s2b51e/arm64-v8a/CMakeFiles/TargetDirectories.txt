@@ -1,0 +1,2 @@
+A:/Projects/toda_app/android/app/.cxx/RelWithDebInfo/56s2b51e/arm64-v8a/CMakeFiles/edit_cache.dir
+A:/Projects/toda_app/android/app/.cxx/RelWithDebInfo/56s2b51e/arm64-v8a/CMakeFiles/rebuild_cache.dir

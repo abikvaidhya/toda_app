@@ -2,6 +2,7 @@ import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
+import 'package:toda_app/controllers/order_controller.dart';
 
 import '../controllers/cart_controller.dart';
 import '../service/app_theme_data.dart';
@@ -106,6 +107,7 @@ class UiUtils {
 
   orderConfirmationBottomSheet({required String phoneNumber}) {
     CartController cartController = Get.find<CartController>();
+    OrderController orderController = Get.find<OrderController>();
 
     return Get.bottomSheet(
       elevation: 5,
@@ -139,7 +141,7 @@ class UiUtils {
                 ],
               ),
               Obx(
-                () => (cartController.processingOrder.value)
+                () => (orderController.processingOrder.value)
                     ? CircularProgressIndicator(
                         color: primaryColor,
                       )
@@ -163,9 +165,11 @@ class UiUtils {
                           ),
                           ElevatedButton(
                             onPressed: () async {
+                              await orderController.placeOrder(
+                                  activeCart: cartController.activeCart.value);
                               Get.back();
-                              await cartController.placeOrder();
-                              if (cartController.orderPlaced.value) {
+                              if (orderController.orderPlaced.value) {
+                                cartController.clearCart();
                                 orderConfirmedBottomSheet();
                               }
                             },
@@ -194,7 +198,7 @@ class UiUtils {
   }
 
   orderConfirmedBottomSheet() {
-    CartController cartController = Get.find<CartController>();
+    OrderController orderController = Get.find<OrderController>();
 
     return Get.bottomSheet(
       elevation: 5,
@@ -204,7 +208,7 @@ class UiUtils {
           () => AnimatedContainer(
               padding: const EdgeInsets.all(10.0),
               duration: Duration(milliseconds: 200),
-              child: (cartController.processingOrder.value)
+              child: (orderController.processingOrder.value)
                   ? Column(
                       children: [
                         CircularProgressIndicator(
@@ -212,10 +216,7 @@ class UiUtils {
                         )
                       ],
                     )
-                  :
-                  // (cartController.orderPlaced.value)
-                  //     ?
-                  Column(
+                  : Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 20,
                       children: [
@@ -268,53 +269,7 @@ class UiUtils {
                         ),
                         SizedBox.shrink()
                       ],
-                    )
-              // : Column(
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     spacing: 20,
-              //     children: [
-              //       Center(
-              //           child: Icon(
-              //         Icons.error_outline,
-              //         size: 50,
-              //         color: errorColor,
-              //       )),
-              //       Column(
-              //         spacing: 10,
-              //         children: [
-              //           Text(
-              //             "Couldn't place order!",
-              //             style: AppThemeData
-              //                 .appThemeData.textTheme.labelSmall,
-              //             textAlign: TextAlign.center,
-              //           ),
-              //           Text(
-              //             'Something went wrong while placing your order.\nPlease try again later.',
-              //             style: AppThemeData
-              //                 .appThemeData.textTheme.bodyLarge,
-              //             textAlign: TextAlign.center,
-              //           ),
-              //         ],
-              //       ),
-              //       Row(
-              //         spacing: 10,
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           ElevatedButton(
-              //             onPressed: () => Get.back(),
-              //             child: Text(
-              //               'Go back',
-              //               style: AppThemeData
-              //                   .appThemeData.textTheme.labelMedium!
-              //                   .copyWith(color: Colors.white),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //       SizedBox.shrink()
-              //     ],
-              //   )
-              ),
+                    )),
         ),
       ),
       isDismissible: true,

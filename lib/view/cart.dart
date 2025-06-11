@@ -173,39 +173,44 @@ class _CartState extends State<Cart> {
                                           BorderRadius.all(Radius.circular(10)),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                                'Item code: ${cartController.cartItems[index].itemCode.toString()}'),
-                                            Text(
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                  'Item code: ${cartController.cartItems[index].itemCode.toString()}'),
+                                              Text(
                                                 cartController.cartItems[index]
                                                     .description,
                                                 style: AppThemeData.appThemeData
-                                                    .textTheme.labelMedium),
-                                            Row(
-                                              spacing: 5,
-                                              children: [
-                                                Text('Price:',
-                                                    style: AppThemeData
-                                                        .appThemeData
-                                                        .textTheme
-                                                        .bodyLarge),
-                                                Text(
-                                                    'Rs.${(cartController.cartItems[index].sp).toStringAsFixed(2)}',
-                                                    style: AppThemeData
-                                                        .appThemeData
-                                                        .textTheme
-                                                        .labelSmall),
-                                              ],
-                                            ),
-                                          ],
+                                                    .textTheme.labelMedium,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Row(
+                                                spacing: 5,
+                                                children: [
+                                                  Text('Price:',
+                                                      style: AppThemeData
+                                                          .appThemeData
+                                                          .textTheme
+                                                          .bodyLarge),
+                                                  Text(
+                                                      'Rs.${(cartController.cartItems[index].sp).toStringAsFixed(2)}',
+                                                      style: AppThemeData
+                                                          .appThemeData
+                                                          .textTheme
+                                                          .labelSmall),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Column(
                                           spacing: 10,

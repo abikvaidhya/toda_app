@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
+import 'package:toda_app/view/screens/order_history_screen.dart';
 import 'package:toda_app/view/screens/profile_management_screen.dart';
 import '../service/constants.dart';
 
@@ -40,10 +41,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             ListTile(
-              onTap: () {
-                Get.back();
-                mainController.homeState(HomeState.cart);
-              },
+              onTap: () => Get.to(() => OrderHistoryScreen()),
               leading: Icon(
                 Icons.receipt_long,
               ),

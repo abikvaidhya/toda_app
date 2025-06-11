@@ -9,7 +9,7 @@ class LandingController extends GetxController {
   LocalStorageHelper localStorageHelper = LocalStorageHelper();
   RxBool checking = true.obs, isInitialized = false.obs;
   Rx<PageController> landingController = PageController(initialPage: 0).obs;
-  SupabaseController supabaseController =Get.find<SupabaseController>();
+  SupabaseController supabaseController = Get.find<SupabaseController>();
 
   checkAppInitialization() async {
     checking(true);
@@ -21,6 +21,11 @@ class LandingController extends GetxController {
     } else {
       checking(false);
     }
+  }
+
+  changeLandingPage({required int id}) {
+    landingController.value.animateToPage(id,
+        duration: Duration(milliseconds: 222), curve: Curves.easeInOut);
   }
 
   initializeApp() {

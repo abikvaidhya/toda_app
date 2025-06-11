@@ -13,27 +13,23 @@ This is a concept app, currently in development.
 
 ## About
 
-Simple video player app with Google FireStore and Firebase authentication.
+Online store concept application for Toda Mart.
 
 ## Dependencies
 
 - cupertino_icons: <br/>
 - flutter_secure_storage: ^9.2.4 <br/>
 - animations: <br/>
-- google_maps_flutter: <br/>
 - get: any <br/>
 - cached_network_image: <br/>
 - google_fonts: <br/>
 - flutter_screenutil: <br/>
-- flutter_xlider: <br/>
 - flutter_slidable: ^4.0.0 <br/>
 - path_provider_android: <br/>
 - shimmer: <br/>
 - blurrycontainer: ^2.1.0 <br/>
 - email_validator: <br/>
-- pin_code_fields: ^8.0.1 <br/>
 - awesome_snackbar_content: ^0.1.5 <br/>
-- firebase_app_check: ^0.3.2+5 <br/>
 - supabase_flutter: ^2.0.0 <br/>
 - animated_notch_bottom_bar: ^1.0.0 <br/>
 

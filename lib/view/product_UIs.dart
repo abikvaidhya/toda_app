@@ -285,7 +285,6 @@ class _ProductDetailState extends State<ProductDetail> {
               children: [
                 Expanded(
                   child: Container(
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(20),
@@ -383,42 +382,45 @@ class _ProductDetailState extends State<ProductDetail> {
                           Text("Base unit:",
                               style: AppThemeData
                                   .appThemeData.textTheme.bodyLarge),
-                          StreamBuilder(
-                            stream: supabaseController.getBaseUnitStream,
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                debugPrint(
-                                    '>> error getting offer products: ${snapshot.error.toString()}');
-                                return Text(
-                                    'Error getting offered products!');
-                              } else if (!snapshot.hasData) {
-                                return Text("N/A",
-                                    style: AppThemeData
-                                        .appThemeData.textTheme.labelLarge);
-                              }
-
-                              productController.baseUnits(snapshot.data);
-
-                              return Text(
-                                  productController.baseUnits
-                                      .firstWhere((e) =>
-                                          e.code == widget.product.baseUnit)
-                                      .label,
-                                  style: AppThemeData
-                                      .appThemeData.textTheme.labelMedium);
-                            },
-                          ),
+                          // StreamBuilder(
+                          //   stream: supabaseController.getBaseUnitStream,
+                          //   builder: (BuildContext context,
+                          //       AsyncSnapshot<dynamic> snapshot) {
+                          //     if (snapshot.connectionState ==
+                          //         ConnectionState.waiting) {
+                          //       return CircularProgressIndicator();
+                          //     } else if (snapshot.hasError) {
+                          //       debugPrint(
+                          //           '>> error getting offer products: ${snapshot.error.toString()}');
+                          //       return Text(
+                          //           'Error getting offered products!');
+                          //     } else if (!snapshot.hasData) {
+                          //       return Text("N/A",
+                          //           style: AppThemeData
+                          //               .appThemeData.textTheme.labelLarge);
+                          //     }
+                          //
+                          //     productController.baseUnits(snapshot.data);
+                          //
+                          //     return Text(
+                          //         productController.baseUnits
+                          //             .firstWhere((e) =>
+                          //                 e.label == widget.product.baseUnit)
+                          //             .label,
+                          //         style: AppThemeData
+                          //             .appThemeData.textTheme.labelMedium);
+                          //   },
+                          // ),
+                          Text(widget.product.baseUnit,
+                              style: AppThemeData
+                                  .appThemeData.textTheme.labelMedium)
                         ],
                       ),
                     ],
                   ),
                   Obx(
-                    () => ((cartController.cartItems.indexWhere((e) =>
-                                widget.product.itemCode == e.itemCode) !=
+                    () => ((cartController.cartItems.indexWhere(
+                                (e) => widget.product.itemCode == e.itemCode) !=
                             (-1)))
                         ? Column(
                             spacing: 5,
@@ -444,8 +446,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Rs.",
-                                        style: AppThemeData.appThemeData
-                                            .textTheme.labelSmall),
+                                        style: AppThemeData
+                                            .appThemeData.textTheme.labelSmall),
                                     Text(
                                       (widget.product.mrp *
                                               cartController.cartItems
@@ -459,8 +461,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                           .appThemeData.textTheme.labelLarge!
                                           .copyWith(
                                         color: Colors.black87,
-                                        decoration:
-                                            TextDecoration.lineThrough,
+                                        decoration: TextDecoration.lineThrough,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,

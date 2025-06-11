@@ -65,24 +65,45 @@ class SupabaseController extends GetxController {
   // logout user
   logoutUser() => supabase.client.auth.signOut();
 
-  // fetch dashboard items
+  // fetch dashboard items (16)
   Future get getDashboardProducts =>
-      supabase.client.from('products').select().limit(8);
+      supabase.client.from('products').select().limit(16);
 
-  // stream dashboard items
+  // stream dashboard items (16)
   Stream get getDashboardProductStream => supabase.client
       .from('products')
       .stream(primaryKey: ['id'])
-      .limit(8)
+      .limit(16)
       .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
-  // fetch item list
-  Future get getAllProducts => supabase.client.from('products').select();
+  // fetch item list (20)
+  Future get getProducts => supabase.client.from('products').select().limit(20);
 
   // stream item list
   Stream get getAllProductStream =>
       supabase.client.from('products').stream(primaryKey: ['id']).map(
           (data) => data.map((e) => getProductFromJson(e)).toList());
+
+  // fetch searched item list
+  Future searchProducts(String value) async =>
+      supabase.client.from('products').select().eq('description', value);
+
+  // stream offer history
+  Stream get getOrderHistory => supabase.client
+      .from('orders')
+      .stream(primaryKey: ['order_id'])
+      // .eq('order_status', status ?? '')
+      .map((data) => data.map((e) => getOrderFromJson(e)).toList());
+
+  // stream filtered offer history
+  Stream getFilteredOrderHistory(String status) => supabase.client
+      .from('orders')
+      .stream(primaryKey: ['order_id'])
+      .eq('order_status', status)
+      .map((data) => data.map((e) => getOrderFromJson(e)).toList());
+
+  // fetch order status
+  Future get getOrderStatus => supabase.client.from('order_status').select();
 
   // fetch offer item list
   Future get getOfferProducts =>

@@ -1,11 +1,9 @@
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/login_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/login_form.dart';
-import 'package:toda_app/view/screens/registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   background_green,
                 ),
                 fit: BoxFit.cover,
-                opacity: 1),
+                opacity: 0.1),
           ),
           child: Center(
             child: SingleChildScrollView(
@@ -42,7 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Image.asset(
                       logo,
                       fit: BoxFit.contain,
-                      height: 250,
+                      color: primaryColor,
+                      height: 220,
                     ),
                   ),
 

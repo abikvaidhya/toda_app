@@ -2,7 +2,6 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import '../controllers/login_controller.dart';
 import '../service/app_theme_data.dart';
 
@@ -41,16 +40,12 @@ class _LoginFormState extends State<LoginForm> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      labelText: (loginController.usingEmail.value)
-                          ? 'Email'
-                          : 'Phone Number',
+                      labelText: 'Email',
                       labelStyle: AppThemeData
                           .appThemeData.textTheme.bodyMedium!
                           .copyWith(color: Colors.white70),
                       prefixIcon: Icon(
-                        (loginController.usingEmail.value)
-                            ? Icons.alternate_email
-                            : Icons.phone,
+                            Icons.alternate_email,
                         color: Colors.white70,
                       ),
                     ),
@@ -74,8 +69,10 @@ class _LoginFormState extends State<LoginForm> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 borderRadius: BorderRadius.circular(30),
                 child: Center(
-                  child: (loginController.usingEmail.value)
-                      ? TextFormField(
+                  child:
+                  // (loginController.usingEmail.value)
+                  //     ?
+                  TextFormField(
                           controller: loginController.passwordField.value,
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.visiblePassword,
@@ -112,28 +109,28 @@ class _LoginFormState extends State<LoginForm> {
                             }
                           },
                         )
-                      : PinCodeTextField(
-                          length: 6,
-                          textInputAction: TextInputAction.done,
-                          obscureText: true,
-                          animationType: AnimationType.fade,
-                          pinTheme: PinTheme(
-                            shape: PinCodeFieldShape.box,
-                            borderRadius: BorderRadius.circular(5),
-                            fieldHeight: 50,
-                            fieldWidth: 40,
-                            activeFillColor: Colors.white70,
-                          ),
-                          animationDuration: Duration(milliseconds: 200),
-                          controller: loginController.passwordField.value,
-                          autoDisposeControllers: false,
-                          onCompleted: (v) {},
-                          onChanged: (value) {},
-                          beforeTextPaste: (text) {
-                            return true;
-                          },
-                          appContext: context,
-                        ),
+                      // : PinCodeTextField(
+                      //     length: 6,
+                      //     textInputAction: TextInputAction.done,
+                      //     obscureText: true,
+                      //     animationType: AnimationType.fade,
+                      //     pinTheme: PinTheme(
+                      //       shape: PinCodeFieldShape.box,
+                      //       borderRadius: BorderRadius.circular(5),
+                      //       fieldHeight: 50,
+                      //       fieldWidth: 40,
+                      //       activeFillColor: Colors.white70,
+                      //     ),
+                      //     animationDuration: Duration(milliseconds: 200),
+                      //     controller: loginController.passwordField.value,
+                      //     autoDisposeControllers: false,
+                      //     onCompleted: (v) {},
+                      //     onChanged: (value) {},
+                      //     beforeTextPaste: (text) {
+                      //       return true;
+                      //     },
+                      //     appContext: context,
+                      //   ),
                 ),
               ),
             ],

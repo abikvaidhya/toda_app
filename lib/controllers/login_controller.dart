@@ -6,6 +6,9 @@ import 'package:toda_app/service/local_storage_helper.dart';
 import 'package:toda_app/view/screens/home_screen.dart';
 import 'package:toda_app/view/ui_utils.dart';
 
+// admin.toda@gmail.com
+// poiu0987
+
 // abik.vaidhya@gmail.com
 // qwerqwer
 
@@ -14,9 +17,10 @@ class LoginController extends GetxController {
   SupabaseController supabaseController = Get.find<SupabaseController>();
 
   var loginFormKey = GlobalKey<FormState>();
-  RxBool processing = false.obs,
-      showPassword = false.obs,
-      usingEmail = true.obs;
+  RxBool processing = false.obs, showPassword = false.obs
+
+      // usingEmail = true.obs
+      ;
 
   Rx<TextEditingController> usernameField = TextEditingController().obs,
       passwordField = TextEditingController().obs;

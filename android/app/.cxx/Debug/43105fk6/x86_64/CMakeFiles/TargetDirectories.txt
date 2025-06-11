@@ -1,0 +1,2 @@
+A:/Projects/toda_app/android/app/.cxx/Debug/43105fk6/x86_64/CMakeFiles/edit_cache.dir
+A:/Projects/toda_app/android/app/.cxx/Debug/43105fk6/x86_64/CMakeFiles/rebuild_cache.dir

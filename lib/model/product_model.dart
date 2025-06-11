@@ -6,31 +6,30 @@ Product getProductFromJson(Map<String, dynamic> str) => Product.fromJson(str);
 String productToJson(Product data) => json.encode(data.toJson());
 
 class Product {
-  late final String description, subGroup, image;
-  late final double lastCP, margin, mrp, taxableCP, sp, discountPerc;
-  late final int itemCode,
+  late final String description, baseUnit, image;
+  late final double itemCode,
+      lastCP,
+      margin,
+      mrp,
+      taxableCP,
+      sp,
+      discountPerc,
       lastPurchasedQuantity,
-      groupID,
-      baseUnit,
-      supplierID,
-      salesQuantity,
-      stock;
+      stock,
+      salesQuantity;
+  late final int groupID;
   late RxInt quantity;
   late final bool inStock, offer;
-  late final DateTime lastPurchasedDate;
 
   Product({
     required this.itemCode,
     required this.description,
     required this.baseUnit,
     required this.groupID,
-    required this.subGroup,
-    required this.supplierID,
     required this.lastCP,
     required this.taxableCP,
     required this.sp,
     required this.stock,
-    required this.lastPurchasedDate,
     required this.lastPurchasedQuantity,
     required this.salesQuantity,
     required this.margin,
@@ -43,23 +42,21 @@ class Product {
   });
 
   Product.fromJson(Map<String, dynamic> json) {
-    itemCode = json['item_code'];
+    itemCode = double.parse(json['item_code'].toString());
     description = json['description'];
     baseUnit = json['base_unit'];
     groupID = json['group_id'];
-    subGroup = json['sub_group'] ?? '';
-    supplierID = json['supplier'] ?? 0;
-    lastCP = double.parse(json['last_cp'].toString());
-    taxableCP = double.parse(json['taxable_cp'].toString());
+    lastCP = double.parse((json['last_cp'] ?? 0.0).toString());
+    taxableCP = double.parse((json['taxable_cp'] ?? 0.0).toString());
     sp = double.parse(json['sp'].toString());
-    stock = json['stock'] ?? 0;
-    lastPurchasedQuantity = json['last_purchase_qty'];
-    lastPurchasedDate = DateTime.parse(json['last_purchase_date']);
-    salesQuantity = json['sales_qty'];
-    margin = double.parse(json['margin'].toString());
-    mrp = double.parse(json['mrp'].toString());
-    inStock = json['in_stock'];
-    offer = json['offer'];
+    stock = double.parse((json['stock'] ?? 0).toString());
+    lastPurchasedQuantity =
+        double.parse((json['last_purchase_qty'] ?? 0).toString());
+    salesQuantity = double.parse((json['sales_qty'] ?? 0).toString());
+    margin = double.parse((json['margin'] ?? 0.0).toString());
+    mrp = double.parse((json['mrp'] ?? json['sp']).toString());
+    inStock = json['in_stock'] ?? true;
+    offer = json['offer'] ?? false;
     discountPerc = double.parse((json['discount_perc'] ?? 0).toString());
     quantity = 1.obs;
     image = json['image'] ?? '';
@@ -98,14 +95,11 @@ class Product {
     product['description'] = description;
     product['base_unit'] = baseUnit;
     product['group_id'] = groupID;
-    product['sub_group'] = subGroup;
-    product['supplier'] = supplierID;
     product['last_cp'] = lastCP;
     product['taxable_cp'] = taxableCP;
     product['sp'] = sp;
     product['stock'] = stock;
     product['last_purchase_quantity'] = lastPurchasedQuantity;
-    product['last_purchase_date'] = lastPurchasedDate;
     product['sales_qty'] = salesQuantity;
     product['margin'] = margin;
     product['mrp'] = mrp;

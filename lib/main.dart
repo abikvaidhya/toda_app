@@ -8,10 +8,13 @@ import 'package:toda_app/view/screens/landing_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // supabase initialization
   await Supabase.initialize(
     url: supa_url,
     anonKey: supa_key,
   );
+
   Get.put(SupabaseController());
 
   runApp(const MyApp());
