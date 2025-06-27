@@ -1,17 +1,17 @@
 import 'package:get/get.dart';
 
-OrderStatus getOrderStatusFromJson(Map<String, dynamic> str) =>
-    OrderStatus.fromJson(str);
+OrderStatusModel getOrderStatusFromJson(Map<String, dynamic> str) =>
+    OrderStatusModel.fromJson(str);
 
-class OrderStatus {
+class OrderStatusModel {
   late int id;
   late String label;
   RxBool isSelected = false.obs;
 
-  OrderStatus(
+  OrderStatusModel(
       {required this.id, required this.label, required this.isSelected});
 
-  OrderStatus.fromJson(Map<String, dynamic> json) {
+  OrderStatusModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     label = json["label"];
     isSelected = false.obs;

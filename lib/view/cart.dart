@@ -20,7 +20,6 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   AppController appController = Get.find<AppController>();
   CartController cartController = Get.find<CartController>();
-  SupabaseController supabaseController = Get.find<SupabaseController>();
 
   @override
   void initState() {
@@ -53,7 +52,7 @@ class _CartState extends State<Cart> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: supabaseController.getCartStream,
+              stream: cartController.getCartStream,
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return ListView.builder(

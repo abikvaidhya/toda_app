@@ -1,8 +1,8 @@
-Order getOrderFromJson(Map<String, dynamic> str) => Order.fromJson(str);
+OrderModel getOrderFromJson(Map<String, dynamic> str) => OrderModel.fromJson(str);
 
-Map<String, dynamic> orderToJson(Order data) => data.toJson();
+Map<String, dynamic> orderToJson(OrderModel data) => data.toJson();
 
-class Order {
+class OrderModel {
   late var orderId;
   late DateTime createdAt;
   DateTime? completedOn;
@@ -12,7 +12,7 @@ class Order {
   late String phoneNumber, customerName, deliveryLocation;
   late Map<String, String> products;
 
-  Order({
+  OrderModel({
     required this.orderId,
     required this.createdAt,
     required this.completedOn,
@@ -25,7 +25,7 @@ class Order {
     required this.products,
   });
 
-  Order.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     orderId = json["order_id"];
     createdAt = DateTime.parse(json["created_at"].toString());
     completedOn = json["completed_on"] == null

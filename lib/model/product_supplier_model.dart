@@ -1,15 +1,15 @@
-ProductSupplier getProductSupplierFromJson(Map<String, dynamic> str) =>
-    ProductSupplier.fromJson(str);
+ProductSupplierModel getProductSupplierFromJson(Map<String, dynamic> str) =>
+    ProductSupplierModel.fromJson(str);
 
-class ProductSupplier {
+class ProductSupplierModel {
   late int id;
   late String name;
   late bool inBusiness;
 
-  ProductSupplier(
+  ProductSupplierModel(
       {required this.id, required this.name, required this.inBusiness});
 
-  ProductSupplier.fromJson(Map<String, dynamic> json) {
+  ProductSupplierModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     inBusiness = json['in_business'];

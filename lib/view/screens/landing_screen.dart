@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/landing_controller.dart';
+import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/curved_containers.dart';
@@ -22,9 +23,15 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Get.delete<LandingController>(); // delete controller
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(),
         body: SafeArea(
       child: Obx(
         () => (landingController.checking.value)

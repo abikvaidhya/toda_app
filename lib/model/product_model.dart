@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 
-Product getProductFromJson(Map<String, dynamic> str) => Product.fromJson(str);
+ProductModel getProductFromJson(Map<String, dynamic> str) => ProductModel.fromJson(str);
 
-String productToJson(Product data) => json.encode(data.toJson());
+String productToJson(ProductModel data) => json.encode(data.toJson());
 
-class Product {
+class ProductModel {
   late final String description, baseUnit, image;
   late final double itemCode,
       lastCP,
@@ -21,7 +21,7 @@ class Product {
   late RxInt quantity;
   late final bool inStock, offer;
 
-  Product({
+  ProductModel({
     required this.itemCode,
     required this.description,
     required this.baseUnit,
@@ -41,7 +41,7 @@ class Product {
     required this.image,
   });
 
-  Product.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json) {
     itemCode = double.parse(json['item_code'].toString());
     description = json['description'];
     baseUnit = json['base_unit'];

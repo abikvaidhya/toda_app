@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/screens/orders/order_history_screen.dart';
@@ -16,7 +17,8 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   AppController mainController = Get.find<AppController>();
-  SupabaseController supabaseController = Get.find<SupabaseController>();
+
+  UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () => Get.to(() => ProfileManagementScreen()),
                   child: Icon(Icons.account_circle)),
               trailing: GestureDetector(
-                  onTap: () => supabaseController.logoutUser(),
+                  onTap: () => userController.logoutUser(),
                   child: Icon(Icons.logout)),
             ),
           ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/order_controller.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/model/order_model.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
@@ -15,7 +14,6 @@ class OrderHistoryScreen extends StatefulWidget {
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
-  SupabaseController supabaseController = Get.find<SupabaseController>();
   OrderController orderController = Get.put(OrderController());
 
   @override
@@ -96,10 +94,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               ),
               Obx(
                 () => StreamBuilder(
-                    // initialData: supabaseController.getOrderHistory,
                     stream: (orderController.showAll.value)
-                        ? supabaseController.getOrderHistory
-                        : supabaseController.getFilteredOrderHistory(
+                        ? orderController.getOrderHistory
+                        : orderController.getFilteredOrderHistory(
                             orderController.activeOrderStatus.toString()),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
@@ -123,7 +120,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         );
                       }
 
-                      List<Order> orders = snapshot.data!;
+                      List<OrderModel> orders = snapshot.data!;
 
                       return ListView.builder(
                         physics: NeverScrollableScrollPhysics(),

@@ -13,7 +13,7 @@ class ProfileManagementScreen extends StatefulWidget {
 }
 
 class _ProfileManagementScreenState extends State<ProfileManagementScreen> {
-  UserController userController = Get.put(UserController());
+  UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {

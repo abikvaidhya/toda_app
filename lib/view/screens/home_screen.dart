@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/product_controller.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/controllers/product_group_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/app_drawer.dart';
 import 'package:toda_app/view/bottom_nav_bar.dart';
+import 'package:toda_app/view/dashboard.dart';
+import 'package:toda_app/view/search.dart';
 import '../cart.dart';
-import '../dashboard.dart';
-import '../search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,11 +22,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   AppController appController = Get.put(AppController(), permanent: true);
-  SupabaseController supabaseController =
-      Get.put(SupabaseController(), permanent: true);
-  ProductController productController =
-      Get.put(ProductController(), permanent: true);
-  CartController cartController = Get.put(CartController(), permanent: true);
+
+  @override
+  initState() {
+    super.initState();
+    Get.put(ProductController(), permanent: true);
+    Get.put(ProductGroupController(), permanent: true);
+    Get.put(CartController(), permanent: true);
+  }
 
   Widget homeWidgets() {
     return PageView(
@@ -75,10 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       endDrawer: AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () async => productController.clearProductCache(),
-        child: homeWidgets(),
-      ),
+      body: homeWidgets(),
     );
   }
 }

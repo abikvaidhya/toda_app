@@ -1,6 +1,7 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toda_app/controllers/product_group_controller.dart';
 import 'package:toda_app/view/product_UIs.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
 import '../controllers/product_controller.dart';
@@ -17,7 +18,8 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   ProductController productController = Get.find<ProductController>();
-  SupabaseController supabaseController = Get.find<SupabaseController>();
+  ProductGroupController productGroupController =
+      Get.find<ProductGroupController>();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,7 @@ class _SearchState extends State<Search> {
             SizedBox(
               height: 40,
               child: StreamBuilder(
-                  stream: supabaseController.getProductGroupStream,
+                  stream: productGroupController.getProductGroupStream,
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {

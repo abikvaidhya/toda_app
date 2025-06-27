@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/product_controller.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/controllers/product_group_controller.dart';
 import 'package:toda_app/model/product_group_model.dart';
 import 'package:toda_app/model/product_model.dart';
 import 'package:toda_app/service/app_theme_data.dart';
@@ -21,8 +21,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  SupabaseController supabaseController = Get.find<SupabaseController>();
   ProductController productController = Get.find<ProductController>();
+  ProductGroupController productGroupController = Get.find<ProductGroupController>();
   AppController appController = Get.find<AppController>();
   CartController cartController = Get.find<CartController>();
 
@@ -63,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
                         style: AppThemeData.appThemeData.textTheme.labelMedium),
                   ),
                   StreamBuilder(
-                    stream: supabaseController.getOfferProductStream,
+                    stream: productController.getOfferProductStream,
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -140,7 +140,7 @@ class _DashboardState extends State<Dashboard> {
                 SizedBox(
                   height: 150,
                   child: StreamBuilder(
-                      stream: supabaseController.getProductGroupStream,
+                      stream: productGroupController.getProductGroupStream,
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
                         if (snapshot.connectionState ==
@@ -165,7 +165,7 @@ class _DashboardState extends State<Dashboard> {
                           );
                         }
 
-                        List<ProductGroup> productGroup = snapshot.data!;
+                        List<ProductGroupModel> productGroup = snapshot.data!;
 
                         return ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -245,7 +245,7 @@ class _DashboardState extends State<Dashboard> {
 
                 // dashboard products
                 StreamBuilder(
-                    stream: supabaseController.getDashboardProductStream,
+                    stream: productController.getDashboardProductStream,
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -274,7 +274,7 @@ class _DashboardState extends State<Dashboard> {
                         );
                       }
 
-                      List<Product> products = snapshot.data!;
+                      List<ProductModel> products = snapshot.data!;
 
                       return GridView.builder(
                         physics: NeverScrollableScrollPhysics(),

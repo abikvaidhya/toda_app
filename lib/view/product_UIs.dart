@@ -13,7 +13,7 @@ import '../service/constants.dart';
 class OfferProduct extends StatefulWidget {
   const OfferProduct({super.key, required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   @override
   State<OfferProduct> createState() => _OfferProductState();
@@ -116,7 +116,7 @@ class _OfferProductState extends State<OfferProduct> {
 class GridProduct extends StatefulWidget {
   const GridProduct({super.key, required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   @override
   State<GridProduct> createState() => _GridProductState();
@@ -263,7 +263,7 @@ class _GridProductState extends State<GridProduct> {
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();

@@ -1,16 +1,16 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
-ProductGroup getProductGroupFromJson(Map<String, dynamic> str) =>
-    ProductGroup.fromJson(str);
+ProductGroupModel getProductGroupFromJson(Map<String, dynamic> str) =>
+    ProductGroupModel.fromJson(str);
 
-class ProductGroup {
+class ProductGroupModel {
   late int id;
   late String name, image;
   late DateTime createdAt;
   late bool inStock;
   RxBool isSelected = false.obs;
 
-  ProductGroup({
+  ProductGroupModel({
     required this.id,
     required this.name,
     required this.image,
@@ -19,7 +19,7 @@ class ProductGroup {
     required this.isSelected,
   });
 
-  ProductGroup.fromJson(Map<String, dynamic> json) {
+  ProductGroupModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     image = json['image'] ?? '';

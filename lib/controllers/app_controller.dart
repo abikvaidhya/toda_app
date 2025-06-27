@@ -3,11 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/local_storage_helper.dart';
 import 'package:toda_app/view/screens/landing_screen.dart';
 
 class AppController extends GetxController {
-  SupabaseController supabaseController = Get.find<SupabaseController>();
+  UserController userController = Get.find<UserController>();
   Rx<NotchBottomBarController> navBarController =
       NotchBottomBarController(index: 0).obs;
   Rx<HomeState> homeState = HomeState.home.obs;
@@ -21,12 +22,12 @@ class AppController extends GetxController {
     super.onInit();
     appUser = (currentUser!).obs;
 
-    debugPrint('>> user id: ${supabaseController.getUser!.id}');
-    debugPrint('>> user email: ${supabaseController.getUser!.email}');
+    debugPrint('>> user id: ${userController.getUser!.id}');
+    debugPrint('>> user email: ${userController.getUser!.email}');
   }
 
   User? get currentUser =>
-      supabaseController.getUser; // get current logged in user
+      userController.getUser; // get current logged in user
 
   navigateDashboard({required int id, bool changeNav = false}) {
     if (changeNav) {

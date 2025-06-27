@@ -15,8 +15,6 @@ void main() async {
     anonKey: supa_key,
   );
 
-  Get.put(SupabaseController());
-
   runApp(const MyApp());
 }
 

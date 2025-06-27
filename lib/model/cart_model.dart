@@ -1,8 +1,8 @@
-Cart getCartFromJson(Map<String, dynamic> str) => Cart.fromJson(str);
+CartModel getCartFromJson(Map<String, dynamic> str) => CartModel.fromJson(str);
 
-Map<String, dynamic> cartToJson(Cart data) => data.toJson();
+Map<String, dynamic> cartToJson(CartModel data) => data.toJson();
 
-class Cart {
+class CartModel {
   late var customerId;
 
   // late String address, customerName, customerPhoneNumber;
@@ -12,14 +12,14 @@ class Cart {
 
   // late bool isActive, isDelivery;
 
-  Cart({
+  CartModel({
     required this.items,
     required this.customerId,
     required this.totalAmount,
     required this.createdAt,
   });
 
-  Cart.fromJson(Map<String, dynamic> json) {
+  CartModel.fromJson(Map<String, dynamic> json) {
     items = {
       for (var v in json['items'] ?? [])
         v.toString().split(':')[0]: v.toString().split(':')[1]

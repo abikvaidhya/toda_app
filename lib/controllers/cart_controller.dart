@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/model/cart_model.dart';
 import 'package:toda_app/model/product_model.dart';
 import 'package:toda_app/view/ui_utils.dart';
-import '../model/order_model.dart';
 import 'app_controller.dart';
 
 class CartController extends GetxController {
-  SupabaseController supabaseController = Get.find<SupabaseController>();
+  SupabaseController supabaseController = SupabaseController.instance;
   AppController appController = Get.find<AppController>();
+  UserController userController = Get.find<UserController>();
   ProductController productController = Get.find<ProductController>();
-  late Rx<Cart> activeCart;
-  RxList<Product> cartItems = <Product>[].obs;
+  late Rx<CartModel> activeCart;
+  RxList<ProductModel> cartItems = <ProductModel>[].obs;
   RxBool processingCart = false.obs, fetchingCart = false.obs;
 
   // create new cart instance
   createCart() async {
-    activeCart = Cart(
+    activeCart = CartModel(
       items: {},
       totalAmount: 0.0,
       createdAt: DateTime.now(),
-      customerId: supabaseController.getUser!.id,
+      customerId: userController.getUser!.id,
     ).obs;
     updateCartTotal(create: true);
   }
@@ -31,7 +32,7 @@ class CartController extends GetxController {
   getCart() async {
     fetchingCart(true);
     try {
-      var data = await supabaseController.getCartData;
+      var data = await getCartData;
 
       if (data == null) {
         debugPrint('>> creating new cart instance');
@@ -39,7 +40,7 @@ class CartController extends GetxController {
       } else {
         debugPrint('>> got cart instance from db');
         activeCart =
-            Cart.fromJson(data).obs; // retrieved cart instance from database
+            CartModel.fromJson(data).obs; // retrieved cart instance from database
 
         cartItems.clear(); // clear cart products
 
@@ -47,7 +48,7 @@ class CartController extends GetxController {
           int index = productController.mainProductList
               .indexWhere((product) => product.itemCode == double.parse(key));
 
-          Product cartProduct = productController.mainProductList[index];
+          ProductModel cartProduct = productController.mainProductList[index];
 
           cartProduct.quantity(int.parse(activeCart.value.items[key]!));
 
@@ -79,13 +80,13 @@ class CartController extends GetxController {
       if (create) {
         // create new instance of a cart
         debugPrint('>> creating new instance of a cart database');
-        supabaseController.createNewCart(
+        createNewCart(
           cart: activeCart.value,
         );
       } else {
         // update cart instance
         debugPrint('>> updating cart database');
-        supabaseController.updateCart(
+        updateCart(
           cart: activeCart.value,
         );
       }
@@ -99,7 +100,7 @@ class CartController extends GetxController {
   Future clearCart() async {
     processingCart(true);
     try {
-      await supabaseController.deleteCart(); // delete cart instance
+      await deleteCart(); // delete cart instance
       getCart(); // create cart instance
     } catch (e) {
       debugPrint('>> error clearing cart in database!: ${e.toString()}');
@@ -110,44 +111,8 @@ class CartController extends GetxController {
     }
   }
 
-  // confirm order
-  // Future placeOrder() async {
-  //   processingOrder(true);
-  //   orderPlaced(false);
-  //   try {
-  //     activeOrder = Order(
-  //       orderId: null,
-  //       createdAt: DateTime.now(),
-  //       completedOn: DateTime.now(),
-  //       totalAmount: activeCart.value.totalAmount,
-  //       status: 1,
-  //       customerId: supabaseController.getUser!.id,
-  //       customerName: customerName.value.text,
-  //       phoneNumber: phoneNumber.value.text,
-  //       products: activeCart.value.items,
-  //     ).obs; // preparing order model for insert in database
-  //     await supabaseController.placeOrder(
-  //       order: activeOrder.value,
-  //     ); //insert order to database
-  //
-  //     await clearCart(); // clear cart
-  //
-  //     orderPlaced(true);
-  //   } catch (e) {
-  //     debugPrint('>> error confirming order: ${e.toString()}');
-  //     UiUtils().showSnackBar(
-  //         isError: true,
-  //         isLong: true,
-  //         title: 'Error placing order!',
-  //         message: 'Could not confirm your order at the moment!');
-  //     orderPlaced(false);
-  //   } finally {
-  //     processingOrder(false);
-  //   }
-  // }
-
   // add product to cart
-  addToCart({required Product product}) {
+  addToCart({required ProductModel product}) {
     if (cartItems.indexWhere((e) => e.itemCode == product.itemCode) == -1) {
       debugPrint('>> adding new product to cart');
       cartItems.add(product); // add product to cart
@@ -169,7 +134,7 @@ class CartController extends GetxController {
   }
 
   // remove product from cart
-  removeFromCart({required Product product}) {
+  removeFromCart({required ProductModel product}) {
     if (cartItems
             .firstWhere((e) => e.itemCode == product.itemCode)
             .quantity
@@ -192,4 +157,47 @@ class CartController extends GetxController {
     }
     updateCartTotal();
   }
+
+
+  // fetch cart items
+  Future get getCartData => supabaseController.supabase.client
+      .from('cart')
+      .select()
+      .eq('customer_id', userController.getUser!.id)
+      .limit(1)
+      .single();
+
+  // stream cart items
+  Stream get getCartStream => supabaseController.supabase.client
+      .from('cart')
+      .stream(primaryKey: ['id'])
+      .eq('customer_id', userController.getUser!.id)
+      .limit(1)
+      .map((data) => data.map((e) => getCartFromJson(e)).toList());
+
+  // create new cart
+  Future createNewCart({required CartModel cart}) async => await supabaseController.supabase.client
+      .from('cart')
+      .insert(cartToJson(cart))
+      .catchError((e) => throw e);
+
+  // update cart
+  Future updateCart({
+    required CartModel cart,
+  }) async =>
+      await supabaseController.supabase.client
+          .from('cart')
+          .update({
+        'items': cart.items.toString(),
+        'total_amount': cart.totalAmount.toStringAsFixed(2),
+      })
+          .eq('customer_id', cart.customerId)
+          .catchError((e) => throw e);
+
+  // delete cart
+  Future deleteCart() async => await supabaseController.supabase.client
+      .from('cart')
+      .delete()
+      .eq('customer_id', userController.getUser!.id)
+      .catchError((e) => throw e);
 }
