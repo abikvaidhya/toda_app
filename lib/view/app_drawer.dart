@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/app_controller.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
-import 'package:toda_app/view/screens/orders/order_history_screen.dart';
-import 'package:toda_app/view/screens/settings/profile_management_screen.dart';
+import 'package:toda_app/view/general/profile_management_screen.dart';
+import 'package:toda_app/view/order/order_history_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});

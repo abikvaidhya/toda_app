@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/local_storage_helper.dart';
-import 'package:toda_app/view/screens/login_screen.dart';
+import 'package:toda_app/view/general/login_screen.dart';
 import '../service/constants.dart';
 
 class LandingController extends GetxController {

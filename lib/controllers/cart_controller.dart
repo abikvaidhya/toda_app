@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/product_controller.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/classes/supabase_class.dart';
 import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/model/cart_model.dart';
 import 'package:toda_app/model/product_model.dart';
@@ -9,7 +9,7 @@ import 'package:toda_app/view/ui_utils.dart';
 import 'app_controller.dart';
 
 class CartController extends GetxController {
-  SupabaseController supabaseController = SupabaseController.instance;
+  SB supabaseController = SB.instance;
   AppController appController = Get.find<AppController>();
   UserController userController = Get.find<UserController>();
   ProductController productController = Get.find<ProductController>();

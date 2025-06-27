@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../service/constants.dart';
+import '../../service/constants.dart';
 
 // offered products shimmer loader
 class OfferProductLoader extends StatefulWidget {
@@ -22,14 +22,12 @@ class _OfferProductLoaderState extends State<OfferProductLoader> {
         margin: EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
           color: Colors.green.shade900,
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(20),
-            bottomLeft: Radius.circular(10),
-            topLeft: Radius.circular(20),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
           ),
         ),
-        height: 100,
-        width: 200,
+        height: 150,
+        width: 150,
       ),
     );
   }

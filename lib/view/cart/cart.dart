@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
-import 'package:toda_app/view/screens/orders/order_confirmation_screen.dart';
+import 'package:toda_app/view/cart/cart_bottom_sheets.dart';
+import 'package:toda_app/view/order/order_confirmation_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
-import 'package:toda_app/view/ui_utils.dart';
-import '../controllers/app_controller.dart';
-import '../service/constants.dart';
+import '../../controllers/app_controller.dart';
+import '../../service/constants.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -368,7 +367,7 @@ class _CartState extends State<Cart> {
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
                                                 errorColor)),
-                                onPressed: () => UiUtils()
+                                onPressed: () => CartBottomSheet()
                                     .deleteCartConfirmationBottomSheet(),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

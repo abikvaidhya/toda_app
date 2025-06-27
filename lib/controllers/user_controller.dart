@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
-import 'package:toda_app/view/screens/home_screen.dart';
-import 'package:toda_app/view/screens/login_screen.dart';
+import 'package:toda_app/classes/supabase_class.dart';
+import 'package:toda_app/view/general/home_screen.dart';
+import 'package:toda_app/view/general/login_screen.dart';
 import 'package:toda_app/view/ui_utils.dart';
 
 class UserController extends GetxController {
-  final supabaseController = SupabaseController.instance;
-  // SupabaseController supabaseController = Get.find<SupabaseController>();
+  final supabaseController = SB.instance;
   Rx<TextEditingController> emailField = TextEditingController().obs,
       phoneNumberField = TextEditingController().obs,
       oldPasswordField = TextEditingController().obs,

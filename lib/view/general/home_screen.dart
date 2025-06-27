@@ -8,9 +8,9 @@ import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/app_drawer.dart';
 import 'package:toda_app/view/bottom_nav_bar.dart';
-import 'package:toda_app/view/dashboard.dart';
-import 'package:toda_app/view/search.dart';
-import '../cart.dart';
+import 'package:toda_app/view/cart/cart.dart';
+import 'package:toda_app/view/general/dashboard.dart';
+import 'package:toda_app/view/product/search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

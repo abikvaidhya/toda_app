@@ -3,9 +3,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/registration_controller.dart';
+import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
-import 'package:toda_app/view/screens/login_screen.dart';
-import '../service/app_theme_data.dart';
+import 'package:toda_app/view/general/login_screen.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
@@ -111,75 +111,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     }
                   },
                 ),
-                // TextFormField(
-                //   controller: registrationController.passwordField.value,
-                //   textInputAction: TextInputAction.done,
-                //   keyboardType: TextInputType.visiblePassword,
-                //   obscureText: !registrationController.showPassword.value,
-                //   decoration: InputDecoration(
-                //       labelText: 'Password',
-                //       labelStyle: AppThemeData.appThemeData.textTheme.bodyMedium!
-                //           .copyWith(color: Colors.white70),
-                //       prefixIcon: Icon(
-                //         Icons.key,
-                //         color: Colors.white70,
-                //       ),
-                //       suffix: IconButton(
-                //         onPressed: () => registrationController.showPassword(
-                //             !registrationController.showPassword.value),
-                //         icon: Obx(
-                //           () => Icon((registrationController.showPassword.value)
-                //               ? Icons.visibility_rounded
-                //               : Icons.visibility_off),
-                //         ),
-                //         color: Colors.white70,
-                //       )),
-                //   validator: (_) {
-                //     if (_!.trim().isEmpty) {
-                //       return 'Please enter your password';
-                //     } else if (_.length < 8) {
-                //       return 'Please enter a valid password!';
-                //     } else {
-                //       return null;
-                //     }
-                //   },
-                // ),
-                // TextFormField(
-                //   controller: registrationController.passwordField.value,
-                //   textInputAction: TextInputAction.done,
-                //   keyboardType: TextInputType.visiblePassword,
-                //   obscureText: !registrationController.showPassword.value,
-                //   decoration: InputDecoration(
-                //       labelText: 'Verify Password',
-                //       labelStyle: AppThemeData.appThemeData.textTheme.bodyMedium!
-                //           .copyWith(color: Colors.white70),
-                //       prefixIcon: Icon(
-                //         Icons.key,
-                //         color: Colors.white70,
-                //       ),
-                //       suffix: IconButton(
-                //         onPressed: () => registrationController.showPassword(
-                //             !registrationController.showPassword.value),
-                //         icon: Obx(
-                //           () => Icon((registrationController.showPassword.value)
-                //               ? Icons.visibility_rounded
-                //               : Icons.visibility_off),
-                //         ),
-                //         color: Colors.white70,
-                //       )),
-                //   validator: (_) {
-                //     if (_!.trim().isEmpty) {
-                //       return 'Please re-enter your password';
-                //     } else if (_.length < 8) {
-                //       return 'Please enter a valid password!';
-                //     } else if (_ !=
-                //         registrationController.passwordField.value.text) {
-                //       return 'Your passwords do not match!';
-                //     } else {
-                //       return null;
-                //     }
-                //   },
-                // ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

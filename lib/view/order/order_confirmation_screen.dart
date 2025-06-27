@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/order_controller.dart';
 import 'package:toda_app/service/constants.dart';
-import 'package:toda_app/view/ui_utils.dart';
-import '../../../controllers/cart_controller.dart';
-import '../../../controllers/supabse_controller.dart';
-import '../../../service/app_theme_data.dart';
+import 'package:toda_app/view/order/order_bottom_sheets.dart';
+import '../../controllers/cart_controller.dart';
+import '../../classes/supabase_class.dart';
+import '../../service/app_theme_data.dart';
 
 class OrderConfirmationScreen extends StatefulWidget {
   const OrderConfirmationScreen({super.key});
@@ -18,7 +18,7 @@ class OrderConfirmationScreen extends StatefulWidget {
 class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
   OrderController orderController = Get.put(OrderController());
   CartController cartController = Get.find<CartController>();
-  SupabaseController supabaseController = Get.find<SupabaseController>();
+  SB supabaseController = Get.find<SB>();
   var customerInformationKey = GlobalKey<FormState>();
 
   @override
@@ -198,7 +198,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                         onPressed: () {
                           if (customerInformationKey.currentState!.validate()) {
                             orderController.processingOrder(false);
-                            UiUtils().orderConfirmationBottomSheet(
+                            OrderBottomSheets().orderConfirmationBottomSheet(
                                 phoneNumber:
                                     orderController.phoneNumber.value.text);
                           }

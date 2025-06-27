@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/login_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
-import 'package:toda_app/view/login_form.dart';
+import 'package:toda_app/view/general/login_form.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

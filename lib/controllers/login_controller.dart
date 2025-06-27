@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/local_storage_helper.dart';
-import 'package:toda_app/view/screens/home_screen.dart';
+import 'package:toda_app/view/general/home_screen.dart';
 import 'package:toda_app/view/ui_utils.dart';
 
 // admin.toda@gmail.com

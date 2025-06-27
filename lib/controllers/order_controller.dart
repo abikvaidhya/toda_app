@@ -6,11 +6,11 @@ import 'package:toda_app/model/order_status_model.dart';
 import '../model/cart_model.dart';
 import '../model/order_model.dart';
 import '../view/ui_utils.dart';
-import 'supabse_controller.dart';
+import '../classes/supabase_class.dart';
 
 class OrderController extends GetxController {
   UserController userController = Get.find<UserController>();
-  SupabaseController supabaseController = SupabaseController.instance;
+  SB supabaseController = SB.instance;
   RxBool fetchingOrderStatusList = true.obs,
       processingOrder = true.obs,
       orderPlaced = false.obs,
@@ -57,7 +57,7 @@ class OrderController extends GetxController {
       ).obs; // preparing order model for insert in database
 
       await supabaseController.supabase.client
-          .from('orders')
+          .from('order')
           .insert(orderToJson(activeOrder.value))
           .catchError((e) => throw e); // insert order to database
 
@@ -78,13 +78,13 @@ class OrderController extends GetxController {
 
   // stream order history
   Stream get getOrderHistory =>
-      supabaseController.supabase.client.from('orders').stream(primaryKey: ['order_id'])
+      supabaseController.supabase.client.from('order').stream(primaryKey: ['order_id'])
       // .eq('order_status', status ?? '')
           .map((data) => data.map((e) => getOrderFromJson(e)).toList());
 
   // stream filtered order history
   Stream getFilteredOrderHistory(String status) => supabaseController.supabase.client
-      .from('orders')
+      .from('order')
       .stream(primaryKey: ['order_id'])
       .eq('order_status', status)
       .map((data) => data.map((e) => getOrderFromJson(e)).toList());

@@ -1,41 +1,37 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
-import 'package:toda_app/model/order_model.dart';
-import 'package:toda_app/model/order_status_model.dart';
+import 'package:toda_app/classes/supabase_class.dart';
 import 'package:toda_app/view/ui_utils.dart';
 import '../model/base_unit_model.dart';
-import '../model/product_group_model.dart';
 import '../model/product_model.dart';
 
 class ProductController extends GetxController {
-  SupabaseController supabaseController = SupabaseController.instance;
+  SB sb = SB.instance;
+
+  StreamController dashboardProductStreamController = StreamController();
 
   Rx<TextEditingController> searchField = TextEditingController().obs;
-  RxBool loadingBaseUnits = true.obs, searchingProducts = false.obs;
+  RxBool loadingDashboardProducts = true.obs,
+      loadingBaseUnits = true.obs,
+      searchingProducts = false.obs;
   RxList<ProductModel> offeredProducts = <ProductModel>[].obs,
+      dashboardProductList = <ProductModel>[].obs,
       mainProductList = <ProductModel>[].obs,
       filteredProducts = <ProductModel>[].obs,
       searchedProducts = <ProductModel>[].obs;
-  Rx<ProductGroupModel?> activeProductGroup = null.obs;
-  RxList<ProductGroupModel> productGroup = <ProductGroupModel>[].obs;
   Rx<TextEditingController> searchQueryController = TextEditingController().obs;
   int start = 0, range = 49;
 
   @override
   onInit() {
     super.onInit();
-    getProducts();
-  }
+    dashboardProductStreamController.sink.add(getDashboardProductStream);
 
-  clearProductCache() {
-    offeredProducts.clear();
-    mainProductList.clear();
-    productGroup.clear();
+    // fetchDashboardProducts();
+    // getProducts();
   }
-
-  getTotalRowCount() {}
 
   // update range
   loadMoreProducts() {
@@ -43,10 +39,26 @@ class ProductController extends GetxController {
     range += 49;
   }
 
+  fetchDashboardProducts() async {
+    loadingDashboardProducts(true);
+    try {
+      dashboardProductList(((await getDashboardProducts) as List)
+          .map((e) => getProductFromJson(e))
+          .toList());
+    } catch (e) {
+      debugPrint('>> error getting dashboard products: $e');
+    } finally {
+      loadingDashboardProducts(false);
+    }
+  }
+
   getProducts({bool add = false}) async {
     searchingProducts(true);
     try {
-      var temp = await supabaseController.supabase.client.from('products').select().range(start, start + range);
+      var temp = await sb.supabase.client
+          .from('product')
+          .select()
+          .range(start, start + range);
 
       if (add) // paginate
       {
@@ -70,9 +82,6 @@ class ProductController extends GetxController {
 
     try {
       var temp = await getFilteredProducts(
-          filter: activeProductGroup.value!.isSelected.value
-              ? activeProductGroup.value!.id.toString()
-              : null,
           query: searchQueryController.value.text.isNotEmpty
               ? searchQueryController.value.text
               : null);
@@ -96,8 +105,7 @@ class ProductController extends GetxController {
     searchingProducts(true);
     searchedProducts.clear();
     try {
-      var temp = await searchProducts(
-          query: searchQueryController.value.text);
+      var temp = await searchProducts(query: searchQueryController.value.text);
       searchedProducts(
           (temp as List).map((e) => getProductFromJson(e)).toList());
     } catch (e) {
@@ -114,18 +122,17 @@ class ProductController extends GetxController {
 
   // fetch dashboard items (16)
   Future get getDashboardProducts =>
-      supabaseController.supabase.client.from('products').select().limit(16);
+      sb.supabase.client.from('random_20_products').select();
 
   // stream dashboard items (16)
-  Stream get getDashboardProductStream => supabaseController.supabase.client
-      .from('products')
-      .stream(primaryKey: ['id'])
-      .limit(16)
-      .map((data) => data.map((e) => getProductFromJson(e)).toList());
+  Stream get getDashboardProductStream => sb.supabase.client
+      .from('random_20_products')
+      .stream(primaryKey: ['id']).map(
+          (data) => data.map((e) => getProductFromJson(e)).toList());
 
   // get row count of products
   Future get totalRowCount =>
-      supabaseController.supabase.client.from('products').select('id').count(CountOption.exact);
+      sb.supabase.client.from('products').select('id').count(CountOption.exact);
 
   // fetch limited item list (49)
   // Future getProducts({
@@ -136,58 +143,58 @@ class ProductController extends GetxController {
 
   // fetch item list with search query
   Future searchProducts({required String query}) =>
-      supabaseController.supabase.client.from('products').select().like('description', query);
+      sb.supabase.client.from('products').select().like('description', query);
 
   // fetch filtered item list with
   Future getFilteredProducts(
           {String? query, String? filter, int start = 0, int range = 49}) =>
       query == null && filter == null
-          ? supabaseController.supabase.client
-              .from('products')
+          ? sb.supabase.client
+              .from('product')
               .select()
               .range(start, start + range)
           : filter == null && query != null
-              ? supabaseController.supabase.client
-                  .from('products')
+              ? sb.supabase.client
+                  .from('product')
                   .select()
                   .like('description', query)
                   .range(start, start + range)
               : filter != null && query == null
-                  ? supabaseController.supabase.client
-                      .from('products')
+                  ? sb.supabase.client
+                      .from('product')
                       .select()
                       .eq('group_id', filter)
                       .range(start, start + range)
-                  : supabaseController.supabase.client
-                      .from('products')
+                  : sb.supabase.client
+                      .from('product')
                       .select()
                       .like('description', query!)
                       .eq('group_id', filter!)
                       .range(start, start + range);
 
   // stream limited item list
-  Stream get getAllProductStream => supabaseController.supabase.client
-      .from('products')
+  Stream get getAllProductStream => sb.supabase.client
+      .from('product')
       .stream(primaryKey: ['id'])
       .limit(50)
       .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
   // fetch offer item list
   Future get getOfferProducts =>
-      supabaseController.supabase.client.from('products').select().eq('offer', true);
+      sb.supabase.client.from('product').select().eq('offer', true);
 
   // stream offer item list
-  Stream get getOfferProductStream => supabaseController.supabase.client
-      .from('products')
+  Stream get getOfferProductStream => sb.supabase.client
+      .from('product')
       .stream(primaryKey: ['id'])
       .eq('offer', true)
       .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
   // fetch base units
-  Future get getBaseUnits => supabaseController.supabase.client.from('base_units').select();
+  Future get getBaseUnits => sb.supabase.client.from('base_unit').select();
 
   // stream base unit
   Stream get getBaseUnitStream =>
-      supabaseController.supabase.client.from('base_units').stream(primaryKey: ['id']).map(
+      sb.supabase.client.from('base_unit').stream(primaryKey: ['id']).map(
           (data) => data.map((e) => getBaseUnitFromJson(e)).toList());
 }

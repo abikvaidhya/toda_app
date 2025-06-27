@@ -2,10 +2,9 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/local_storage_helper.dart';
-import 'package:toda_app/view/screens/landing_screen.dart';
+import 'package:toda_app/view/general/landing_screen.dart';
 
 class AppController extends GetxController {
   UserController userController = Get.find<UserController>();

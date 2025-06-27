@@ -2,8 +2,8 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/login_controller.dart';
-import '../service/app_theme_data.dart';
+import 'package:toda_app/controllers/login_controller.dart';
+import 'package:toda_app/service/app_theme_data.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

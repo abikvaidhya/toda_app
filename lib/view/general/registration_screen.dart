@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/registration_controller.dart';
-import 'package:toda_app/view/registration_form.dart';
-
-import '../../service/app_theme_data.dart';
-import '../../service/constants.dart';
+import 'package:toda_app/service/app_theme_data.dart';
+import 'package:toda_app/service/constants.dart';
+import 'package:toda_app/view/general/registration_form.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
