@@ -44,16 +44,16 @@ class CartController extends GetxController {
         cartItems.clear(); // clear cart products
 
         for (var key in activeCart.value.items.keys) {
-          int index = productController.allProducts
+          int index = productController.mainProductList
               .indexWhere((product) => product.itemCode == double.parse(key));
 
-          Product cartProduct = productController.allProducts[index];
+          Product cartProduct = productController.mainProductList[index];
 
           cartProduct.quantity(int.parse(activeCart.value.items[key]!));
 
           if (index != -1) {
             cartItems.add(productController
-                .allProducts[index]); // add cart product from database
+                .mainProductList[index]); // add cart product from database
           }
         }
       }

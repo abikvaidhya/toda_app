@@ -35,14 +35,14 @@ class _OfferProductLoaderState extends State<OfferProductLoader> {
   }
 }
 
-class ProductGroupLoader extends StatefulWidget {
-  const ProductGroupLoader({super.key});
+class ProductGroupChipLoader extends StatefulWidget {
+  const ProductGroupChipLoader({super.key});
 
   @override
-  State<ProductGroupLoader> createState() => _ProductGroupLoaderState();
+  State<ProductGroupChipLoader> createState() => _ProductGroupChipLoaderState();
 }
 
-class _ProductGroupLoaderState extends State<ProductGroupLoader> {
+class _ProductGroupChipLoaderState extends State<ProductGroupChipLoader> {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
@@ -70,6 +70,31 @@ class ProductLoader extends StatefulWidget {
 }
 
 class _ProductLoaderState extends State<ProductLoader> {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue.shade200,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductGroupLoader extends StatefulWidget {
+  const ProductGroupLoader({super.key});
+
+  @override
+  State<ProductGroupLoader> createState() => _ProductGroupLoaderState();
+}
+
+class _ProductGroupLoaderState extends State<ProductGroupLoader> {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(

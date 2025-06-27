@@ -31,7 +31,7 @@ class Order {
     completedOn = json["completed_on"] == null
         ? null
         : DateTime.parse(json["completed_on"].toString());
-    totalAmount = json["total_amount"];
+    totalAmount = double.parse(json["total_amount"].toString());
     status = json["order_status"];
     customerId = json["customer_id"];
     customerName = json["customer_name"];

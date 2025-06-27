@@ -1,14 +1,17 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toda_app/controllers/app_controller.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/product_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/model/product_group_model.dart';
+import 'package:toda_app/model/product_model.dart';
 import 'package:toda_app/service/app_theme_data.dart';
+import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/product_UIs.dart';
-import 'package:toda_app/view/screens/all_products_screen.dart';
+import 'package:toda_app/view/screens/category/category_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
-import '../controllers/app_controller.dart';
-import '../model/product_model.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -39,78 +42,180 @@ class _DashboardState extends State<Dashboard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                'Welcome back,',
+                style: AppThemeData.appThemeData.textTheme.bodyLarge,
+              ),
+            ),
+
             // top offers section
+            if (productController.offeredProducts.isNotEmpty)
+              Column(
+                spacing: 10,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    child: Text('Top Offers',
+                        style: AppThemeData.appThemeData.textTheme.labelMedium),
+                  ),
+                  StreamBuilder(
+                    stream: supabaseController.getOfferProductStream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: 3,
+                            itemBuilder: (BuildContext context, int index) {
+                              return OfferProductLoader();
+                            },
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        debugPrint(
+                            '>> error getting offer products: ${snapshot.error.toString()}');
+                        return Text('Error getting offered products!');
+                      } else if (!snapshot.hasData) {
+                        return SizedBox.shrink();
+                      }
+
+                      // List<Product> offerProducts = (snapshot.data!);
+                      productController.offeredProducts(snapshot.data);
+
+                      return SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: productController.offeredProducts.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return OfferProduct(
+                                product:
+                                    productController.offeredProducts[index]);
+                          },
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+
+            // product groups
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    'Welcome back,',
-                    style: AppThemeData.appThemeData.textTheme.bodyLarge,
-                  ),
-                ),
-                if (productController.offerProducts.isNotEmpty)
-                  Column(
-                    spacing: 10,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                        ),
-                        child: Text('Top Offers',
+                      Text('Categories',
+                          style:
+                              AppThemeData.appThemeData.textTheme.labelMedium!),
+                      GestureDetector(
+                        onTap: () => Get.to(() => CategoryScreen()),
+                        // onTap: () => appController.navigateDashboard(
+                        //   id: 1,
+                        //   changeNav: true,
+                        // ),
+                        child: Text('View All',
                             style: AppThemeData
-                                .appThemeData.textTheme.labelMedium),
+                                .appThemeData.textTheme.bodyMedium!
+                                .copyWith(
+                              color: Colors.black54,
+                            )),
                       ),
-                      StreamBuilder(
-                        stream: supabaseController.getOfferProductStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return SizedBox(
-                              height: 100,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount: 3,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return OfferProductLoader();
-                                },
-                              ),
-                            );
-                          } else if (snapshot.hasError) {
-                            debugPrint(
-                                '>> error getting offer products: ${snapshot.error.toString()}');
-                            return Text('Error getting offered products!');
-                          } else if (!snapshot.hasData) {
-                            return SizedBox.shrink();
-                          }
-
-                          // List<Product> offerProducts = (snapshot.data!);
-                          productController.offerProducts(snapshot.data);
-
-                          return SizedBox(
-                            height: 100,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: productController.offerProducts.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return OfferProduct(
-                                    product:
-                                        productController.offerProducts[index]);
-                              },
-                            ),
-                          );
-                        },
-                      )
                     ],
                   ),
+                ),
+
+                // product group list
+                SizedBox(
+                  height: 150,
+                  child: StreamBuilder(
+                      stream: supabaseController.getProductGroupStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            itemCount: 7,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ProductGroupLoader();
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          debugPrint(
+                              '>> error getting product group: ${snapshot.error.toString()}');
+                          return Text('Error getting product group!');
+                        } else if (!snapshot.hasData) {
+                          return Center(
+                            child: Text('No product groups!'),
+                          );
+                        }
+
+                        List<ProductGroup> productGroup = snapshot.data!;
+
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          itemCount:
+                              productGroup.length < 5 ? productGroup.length : 5,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                    child: SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: (productGroup[index].image.isEmpty)
+                                          ? Image.asset(
+                                              logo_white,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.memory(
+                                              base64.decode(
+                                                  (productGroup[index].image)),
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                  ),
+                                  Text(
+                                    productGroup[index].name,
+                                    style: AppThemeData
+                                        .appThemeData.textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                ),
               ],
             ),
 
-            // all items section
+            // products section
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -123,7 +228,10 @@ class _DashboardState extends State<Dashboard> {
                           style:
                               AppThemeData.appThemeData.textTheme.labelMedium!),
                       GestureDetector(
-                        onTap: () => Get.to(() => AllProductsScreen()),
+                        onTap: () => appController.navigateDashboard(
+                          id: 1,
+                          changeNav: true,
+                        ),
                         child: Text('View All',
                             style: AppThemeData
                                 .appThemeData.textTheme.bodyMedium!
@@ -156,13 +264,11 @@ class _DashboardState extends State<Dashboard> {
                             return ProductLoader();
                           },
                         );
-                      }
-                      else if (snapshot.hasError) {
+                      } else if (snapshot.hasError) {
                         debugPrint(
                             '>> error getting items: ${snapshot.error.toString()}');
                         return Text('Error getting items!');
-                      }
-                      else if (!snapshot.hasData) {
+                      } else if (!snapshot.hasData) {
                         return Center(
                           child: Text('No items!'),
                         );

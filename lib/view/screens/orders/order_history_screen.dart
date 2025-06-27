@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/order_controller.dart';
+import 'package:toda_app/controllers/supabse_controller.dart';
+import 'package:toda_app/model/order_model.dart';
+import 'package:toda_app/service/app_theme_data.dart';
 import 'package:toda_app/service/constants.dart';
-import '../../controllers/supabse_controller.dart';
-import '../../model/order_model.dart';
-import '../../service/app_theme_data.dart';
-import '../shimmer_loaders.dart';
+import 'package:toda_app/view/shimmer_loaders.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
@@ -199,7 +199,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                           Text(
                                             'Rs.',
                                             style: AppThemeData.appThemeData
-                                                .textTheme.bodyMedium,
+                                                .textTheme.bodySmall,
                                           ),
                                           Text(
                                             orders[index]
@@ -211,7 +211,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                           Text(
                                             '/-',
                                             style: AppThemeData.appThemeData
-                                                .textTheme.bodyMedium,
+                                                .textTheme.bodySmall,
                                           ),
                                         ],
                                       ),

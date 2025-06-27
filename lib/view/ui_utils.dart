@@ -259,9 +259,9 @@ class UiUtils {
                                 Get.back();
                               },
                               child: Text(
-                                'Continue browsing',
+                                'Continue browsing',textAlign: TextAlign.center,
                                 style: AppThemeData
-                                    .appThemeData.textTheme.labelMedium!
+                                    .appThemeData.textTheme.bodyMedium!
                                     .copyWith(color: Colors.white),
                               ),
                             ),

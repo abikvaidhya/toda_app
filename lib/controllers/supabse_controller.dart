@@ -76,24 +76,60 @@ class SupabaseController extends GetxController {
       .limit(16)
       .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
-  // fetch item list (20)
-  Future get getProducts => supabase.client.from('products').select().limit(20);
+  // get row count of products
+  Future get totalRowCount =>
+      supabase.client.from('products').select('id').count(CountOption.exact);
 
-  // stream item list
-  Stream get getAllProductStream =>
-      supabase.client.from('products').stream(primaryKey: ['id']).map(
-          (data) => data.map((e) => getProductFromJson(e)).toList());
+  // fetch limited item list (49)
+  Future getProducts({
+    int start = 0,
+    int range = 49,
+  }) =>
+      supabase.client.from('products').select().range(start, start + range);
 
-  // fetch searched item list
-  Future searchProducts(String value) async =>
-      supabase.client.from('products').select().eq('description', value);
+  // fetch item list with search query
+  Future searchProducts({required String query}) =>
+      supabase.client.from('products').select().like('description', query);
+
+  // fetch filtered item list with
+  Future getFilteredProducts(
+          {String? query, String? filter, int start = 0, int range = 49}) =>
+      query == null && filter == null
+          ? supabase.client
+              .from('products')
+              .select()
+              .range(start, start + range)
+          : filter == null && query != null
+              ? supabase.client
+                  .from('products')
+                  .select()
+                  .like('description', query)
+                  .range(start, start + range)
+              : filter != null && query == null
+                  ? supabase.client
+                      .from('products')
+                      .select()
+                      .eq('group_id', filter)
+                      .range(start, start + range)
+                  : supabase.client
+                      .from('products')
+                      .select()
+                      .like('description', query!)
+                      .eq('group_id', filter!)
+                      .range(start, start + range);
+
+  // stream limited item list
+  Stream get getAllProductStream => supabase.client
+      .from('products')
+      .stream(primaryKey: ['id'])
+      .limit(50)
+      .map((data) => data.map((e) => getProductFromJson(e)).toList());
 
   // stream offer history
-  Stream get getOrderHistory => supabase.client
-      .from('orders')
-      .stream(primaryKey: ['order_id'])
-      // .eq('order_status', status ?? '')
-      .map((data) => data.map((e) => getOrderFromJson(e)).toList());
+  Stream get getOrderHistory =>
+      supabase.client.from('orders').stream(primaryKey: ['order_id'])
+          // .eq('order_status', status ?? '')
+          .map((data) => data.map((e) => getOrderFromJson(e)).toList());
 
   // stream filtered offer history
   Stream getFilteredOrderHistory(String status) => supabase.client

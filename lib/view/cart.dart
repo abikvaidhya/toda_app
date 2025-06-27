@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/cart_controller.dart';
 import 'package:toda_app/controllers/supabse_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
-import 'package:toda_app/view/screens/order_confirmation_screen.dart';
+import 'package:toda_app/view/screens/orders/order_confirmation_screen.dart';
 import 'package:toda_app/view/shimmer_loaders.dart';
 import 'package:toda_app/view/ui_utils.dart';
 import '../controllers/app_controller.dart';
@@ -112,11 +112,13 @@ class _CartState extends State<Cart> {
                               spacing: 5,
                               children: [
                                 Text(
+                                  textAlign: TextAlign.center,
                                   'You have no items in your cart right now.',
                                   style: AppThemeData
                                       .appThemeData.textTheme.bodyMedium,
                                 ),
                                 Text(
+                                  textAlign: TextAlign.center,
                                   'Add some products on your cart and place your order.',
                                   style: AppThemeData
                                       .appThemeData.textTheme.labelSmall,
@@ -127,9 +129,10 @@ class _CartState extends State<Cart> {
                               onPressed: () => appController.navigateDashboard(
                                   id: 0, changeNav: true),
                               child: Text(
+                                textAlign: TextAlign.center,
                                 'Browse products',
                                 style: AppThemeData
-                                    .appThemeData.textTheme.labelMedium!
+                                    .appThemeData.textTheme.bodyMedium!
                                     .copyWith(color: Colors.white),
                               ),
                             ),
@@ -181,7 +184,7 @@ class _CartState extends State<Cart> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
                                                   'Item code: ${cartController.cartItems[index].itemCode.toString()}'),
@@ -189,24 +192,19 @@ class _CartState extends State<Cart> {
                                                 cartController.cartItems[index]
                                                     .description,
                                                 style: AppThemeData.appThemeData
-                                                    .textTheme.labelMedium,
+                                                    .textTheme.labelSmall,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               Row(
-                                                spacing: 5,
+                                                spacing: 2,
                                                 children: [
-                                                  Text('Price:',
-                                                      style: AppThemeData
-                                                          .appThemeData
-                                                          .textTheme
-                                                          .bodyLarge),
                                                   Text(
-                                                      'Rs.${(cartController.cartItems[index].sp).toStringAsFixed(2)}',
+                                                      'Rs.${(cartController.cartItems[index].sp).toStringAsFixed(2)} (per unit)',
                                                       style: AppThemeData
                                                           .appThemeData
                                                           .textTheme
-                                                          .labelSmall),
+                                                          .bodySmall),
                                                 ],
                                               ),
                                             ],
@@ -219,11 +217,11 @@ class _CartState extends State<Cart> {
                                           children: [
                                             Obx(
                                               () => Text(
-                                                  'Rs.${(cartController.cartItems[index].sp * cartController.cartItems[index].quantity.value).toStringAsFixed(2)}',
+                                                  'Rs. ${(cartController.cartItems[index].sp * cartController.cartItems[index].quantity.value).toStringAsFixed(2)}',
                                                   style: AppThemeData
                                                       .appThemeData
                                                       .textTheme
-                                                      .labelSmall),
+                                                      .bodyMedium),
                                             ),
                                             Row(
                                               children: [

@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:toda_app/controllers/order_controller.dart';
 import 'package:toda_app/service/constants.dart';
 import 'package:toda_app/view/ui_utils.dart';
-import '../../controllers/cart_controller.dart';
-import '../../controllers/supabse_controller.dart';
-import '../../service/app_theme_data.dart';
+import '../../../controllers/cart_controller.dart';
+import '../../../controllers/supabse_controller.dart';
+import '../../../service/app_theme_data.dart';
 
 class OrderConfirmationScreen extends StatefulWidget {
   const OrderConfirmationScreen({super.key});
@@ -178,9 +178,9 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           spacing: 2,
                           children: [
                             Text(
-                              'Sum total: Rs.',
+                              'Total: Rs.',
                               style:
-                                  AppThemeData.appThemeData.textTheme.bodyLarge,
+                                  AppThemeData.appThemeData.textTheme.bodyMedium,
                             ),
                             Obx(
                               () => Text(

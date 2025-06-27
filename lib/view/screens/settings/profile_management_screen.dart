@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toda_app/controllers/user_controller.dart';
 import 'package:toda_app/service/app_theme_data.dart';
-
-import '../../service/constants.dart';
+import 'package:toda_app/service/constants.dart';
 
 class ProfileManagementScreen extends StatefulWidget {
   const ProfileManagementScreen({super.key});

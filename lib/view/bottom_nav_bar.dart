@@ -1,6 +1,8 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toda_app/service/app_theme_data.dart';
+import 'package:toda_app/service/constants.dart';
 import '../controllers/app_controller.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -17,10 +19,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Obx(
       () => AnimatedNotchBottomBar(
-        circleMargin: 0,
-        elevation: 0,bottomBarHeight: 80,
+        color: primaryColor,
+        removeMargins: true,
+        notchColor: primaryColor,
         durationInMilliSeconds: 100,
+        showLabel: false,
         showBlurBottomBar: false,
+        itemLabelStyle: AppThemeData.appThemeData.textTheme.bodySmall!
+            .copyWith(color: tertiaryColor),
+        kIconSize: 24,
+        kBottomRadius: 0,
+        notchBottomBarController: appController.navBarController.value,
         onTap: (i) {
           if (i != 3) appController.homeIndex(i);
           switch (i) {
@@ -42,21 +51,30 @@ class _BottomNavBarState extends State<BottomNavBar> {
         },
         bottomBarItems: [
           BottomBarItem(
-              inActiveItem: Icon(Icons.home_outlined),
-              activeItem: Icon(Icons.home_filled),
-              itemLabel: 'Home'),
+            inActiveItem: Icon(
+              Icons.home_outlined,
+              color: tertiaryColor,
+            ),
+            activeItem: Icon(Icons.home_filled, color: tertiaryColor),
+            itemLabel: 'Home',
+          ),
           BottomBarItem(
-              inActiveItem: Icon(Icons.search),
-              activeItem: Icon(Icons.search),
-              itemLabel: 'Search'),
+            inActiveItem: Icon(
+              Icons.search,
+              color: tertiaryColor,
+            ),
+            activeItem: Icon(Icons.search, color: tertiaryColor),
+            itemLabel: 'Search',
+          ),
           BottomBarItem(
-              inActiveItem: Icon(Icons.shopping_cart_outlined),
-              activeItem: Icon(Icons.shopping_cart),
-              itemLabel: 'Cart'),
+            inActiveItem: Icon(
+              Icons.shopping_cart_outlined,
+              color: tertiaryColor,
+            ),
+            activeItem: Icon(Icons.shopping_cart, color: tertiaryColor),
+            itemLabel: 'Cart',
+          ),
         ],
-        kIconSize: 24,
-        kBottomRadius: 10,
-        notchBottomBarController: appController.navBarController.value,
       ),
     );
   }
